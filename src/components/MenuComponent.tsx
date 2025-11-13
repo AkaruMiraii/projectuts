@@ -1,0 +1,142 @@
+import React from 'react';
+import { View, Text, StyleSheet, Image } from 'react-native';
+import Ionicons from '@react-native-vector-icons/ionicons';
+
+interface MenuItemProps {
+  name: string;
+  category: string;
+  rating: number;
+  sold: string;
+  price: string;
+  liked: boolean;
+  image?: string;
+}
+
+interface MenuComponentProps {
+  data: MenuItemProps[];
+}
+
+const MenuItem: React.FC<MenuItemProps> = ({
+  name,
+  category,
+  rating,
+  sold,
+  price,
+  liked,
+  image,
+}) => {
+  const hasImage = !!image;
+
+  return (
+    <View style={styles.card}>
+      {/* Gambar atau icon */}
+      <View style={styles.imageContainer}>
+        {hasImage ? (
+          <Image source={{ uri: image }} style={styles.image} resizeMode="contain" />
+        ) : (
+          <Ionicons name="fast-food-outline" size={50} color="#b0815a" />
+        )}
+      </View>
+
+      {/* Nama dan kategori */}
+      <Text style={styles.name}>{name}</Text>
+      <View style={styles.categoryTag}>
+        <Text style={styles.categoryText}>{category}</Text>
+      </View>
+
+      {/* Rating dan terjual */}
+      <View style={styles.ratingRow}>
+        <Ionicons name="star" size={14} color="#c29d65" />
+        <Text style={styles.ratingText}>
+          {rating} ({sold} sold)
+        </Text>
+      </View>
+
+      {/* Harga dan tombol like */}
+      <View style={styles.footer}>
+        <Text style={styles.price}>{price}</Text>
+        <Ionicons
+          name={liked ? 'heart' : 'heart-outline'}
+          size={18}
+          color={liked ? '#c29d65' : '#c9c9c9'}
+        />
+      </View>
+    </View>
+  );
+};
+
+const MenuComponent: React.FC<MenuComponentProps> = ({ data }) => {
+  return (
+    <View style={styles.menuGrid}>
+      {data.map((item, index) => (
+        <MenuItem key={index} {...item} />
+      ))}
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  menuGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+    paddingHorizontal: 16,
+  },
+  card: {
+    borderRadius: 12,
+    width: '47%',
+    padding: 10,
+    marginBottom: 20,
+  },
+  imageContainer: {
+    backgroundColor: '#f5f2f0',
+    borderRadius: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: 90,
+    marginBottom: 8,
+  },
+  image: {
+    width: '100%',
+    height: '100%',
+    borderRadius: 12,
+  },
+  name: {
+    fontWeight: 'bold',
+    color: '#2d1b10',
+    marginBottom: 2,
+  },
+  categoryTag: {
+    backgroundColor: '#c3a78e',
+    alignSelf: 'flex-start',
+    borderRadius: 12,
+    paddingHorizontal: 8,
+    paddingVertical: 2,
+    marginBottom: 4,
+  },
+  categoryText: {
+    fontSize: 11,
+    color: '#fff',
+  },
+  ratingRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 4,
+  },
+  ratingText: {
+    fontSize: 12,
+    color: '#555',
+    marginLeft: 4,
+  },
+  footer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  price: {
+    fontWeight: '600',
+    color: '#2d1b10',
+  },
+});
+
+export default MenuComponent;

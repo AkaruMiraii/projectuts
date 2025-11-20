@@ -4,8 +4,7 @@ import {Image, Pressable, StyleSheet, Text, View } from 'react-native';
 
 const LoginScreen = () => {
     return (
-        <SafeAreaView style={styles.container}>
-            
+        <SafeAreaView style={styles.container}> 
         <View style = {styles.header}>
              <View  style = {styles.backgroundImageWrapper}>
                 <Image 

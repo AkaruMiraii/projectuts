@@ -1,8 +1,18 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, Image, ImageSourcePropType } from 'react-native';
 
-const BannerContainerComponent = () => {
-  return <View style={styles.bannercontainer}></View>;
+interface BannerContainerProps {
+  image?: ImageSourcePropType;
+}
+
+const BannerContainerComponent = ({ image }: BannerContainerProps) => {
+  return (
+    <View style={styles.bannercontainer}>
+      {image && (
+        <Image source={image} style={styles.image} resizeMode="cover" />
+      )}
+    </View>
+  );
 };
 
 const styles = StyleSheet.create({
@@ -10,6 +20,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#795548',
     height: 140,
     borderRadius: 10,
+    overflow: 'hidden',
+  },
+  image: {
+    width: '100%',
+    height: '100%',
   },
 });
 

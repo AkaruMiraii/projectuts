@@ -1,5 +1,11 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  ImageSourcePropType,
+} from 'react-native'; // <-- tambah ini
 import Ionicons from '@react-native-vector-icons/ionicons';
 
 interface MenuItemProps {
@@ -9,7 +15,7 @@ interface MenuItemProps {
   sold: string;
   price: string;
   liked: boolean;
-  image?: string;
+  image?: ImageSourcePropType;
 }
 
 interface MenuComponentProps {
@@ -25,14 +31,14 @@ const MenuItem: React.FC<MenuItemProps> = ({
   liked,
   image,
 }) => {
-  const hasImage = !!image;
+  const hasImage = image !== undefined && image !== null;
 
   return (
     <View style={styles.card}>
       {/* Gambar atau icon */}
       <View style={styles.imageContainer}>
         {hasImage ? (
-          <Image source={{ uri: image }} style={styles.image} resizeMode="contain" />
+          <Image source={image} style={styles.image} resizeMode="contain" />
         ) : (
           <Ionicons name="fast-food-outline" size={50} color="#b0815a" />
         )}
@@ -89,17 +95,17 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   imageContainer: {
-    backgroundColor: '#f5f2f0',
     borderRadius: 12,
     alignItems: 'center',
     justifyContent: 'center',
-    height: 90,
+    height: 130, // meningkat
     marginBottom: 8,
   },
   image: {
-    width: '100%',
-    height: '100%',
+    width: '130%',
+    height: '130%',
     borderRadius: 12,
+    resizeMode: 'contain',
   },
   name: {
     fontWeight: 'bold',

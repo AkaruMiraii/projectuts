@@ -19,7 +19,7 @@ const HomeScreen = () => {
       sold: '7.9k',
       price: '83.000',
       liked: false,
-      image: '', // kosong = tampil icon default
+      image: require('../assets/croissant_chocolate-removebg-preview.png'), // kosong = tampil icon default
     },
     {
       name: 'Éclair au Chocolat',
@@ -28,7 +28,7 @@ const HomeScreen = () => {
       sold: '2.7k',
       price: '65.000',
       liked: false,
-      image: '',
+      image: require('../assets/eclair_chocolat-removebg-preview.png'),
     },
     {
       name: 'Choux à la Crème',
@@ -37,7 +37,7 @@ const HomeScreen = () => {
       sold: '3.5k',
       price: '70.000',
       liked: true,
-      image: '',
+      image: require('../assets/choux_fix-removebg-preview.png'),
     },
     {
       name: 'Caramel Latte',
@@ -46,7 +46,7 @@ const HomeScreen = () => {
       sold: '4.2k',
       price: '45.000',
       liked: true,
-      image: '',
+      image: require('../assets/caramel_latte-removebg-preview.png'),
     },
   ];
 
@@ -79,7 +79,7 @@ const HomeScreen = () => {
           <MenuComponent data={menuData} />
         </View>
         <View style={styles.BannerBrand}>
-          <BannerContainerComponent />
+          <BannerContainerComponent image={require('../assets/banner.png')}/>
         </View>
       </View>
     </ScrollView>
@@ -134,7 +134,7 @@ const styles = StyleSheet.create({
   BannerBrand: {
     paddingRight: 20,
     paddingLeft: 20,
-    paddingBottom: 150,
+    paddingBottom: 70,
   },
 });
 

@@ -1,8 +1,10 @@
 import React from "react";
 import { Image, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useNavigation } from '@react-navigation/native';
 
 const Login = () => {
+  const navigation = useNavigation<any>();
   return (
     <SafeAreaView style = {styles.container}>
         <View style = {styles.header}>
@@ -13,13 +15,13 @@ const Login = () => {
         </View>
 
         <View style = {styles.body}>
-            <Text style = {{fontSize : 40, marginTop : 40}}> Login </Text>
+            <Text style = {{fontSize : 40, marginTop : 40, fontFamily : 'Poppins-Regular'}}> Welcome </Text>
             <View style = {styles.form}>
                 <TextInput style={styles.formControl} placeholder="Email"/>
                 <TextInput style={styles.formControl} placeholder="Password"/>
                 <Text style = {{color : '#5D4038', textAlign : 'right', marginRight : 15}}>Forgot Password</Text>
-                <Pressable style={styles.button}>
-                    <Text style = {styles.label}>Login</Text>
+                <Pressable style={styles.button} onPress={() => navigation.navigate('MainTab')}>
+                  <Text style = {styles.label}>Login</Text>
                 </Pressable>
 
                 <View style = {styles.textFooterWrapper}>
@@ -30,16 +32,16 @@ const Login = () => {
 
                 <View style = {styles.sosmed}>
                     <Image 
-                    source={require ('../assets/google.png')} 
+                    source={require ('../assets/images/google.png')} 
                     style ={styles.icon} />
 
                      <Image 
-                    source={require ('../assets/apple-logo.png')} 
+                    source={require ('../assets/images/apple-logo.png')} 
                     style ={styles.icon} />
 
                         <Image 
-                    source={require ('../assets/facebook.png')} 
-                    style ={styles.icon} />
+                      source={require ('../assets/images/facebook.png')} 
+                      style ={styles.icon} />
 
                 </View>
 
@@ -75,13 +77,13 @@ const styles = StyleSheet.create({
   },
   brandsmall: {
     fontSize: 50,
-    fontFamily: 'Times New Roman',
+    fontFamily: 'dancingScript',
     color: '#EFEBE8',
     marginBottom: -20,
   },
   brandbig: {
     fontSize: 50,
-    fontFamily: 'Poppins-Bold',
+    fontFamily: 'Poppins-Regular',
     color: '#EFEBE8',
   },
 

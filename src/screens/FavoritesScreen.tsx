@@ -13,7 +13,6 @@ import SearchBarComponent from '../components/SearchBarComponent';
 import ProductCardComponent from '../components/ProductCardComponent';
 
 const FavoritesScreen = () => {
-  // Definisi Interface untuk data agar Type Safe (Opsional tapi disarankan di TSX)
   interface ProductData {
     id: number;
     name: string;
@@ -35,7 +34,7 @@ const FavoritesScreen = () => {
       price: '70.000',
       rating: 4.8,
       soldCount: '3.5k sold',
-      image: require('../assets/choux_fix-removebg-preview.png'),
+      image: require('../assets/images/choux_fix-removebg-preview.png'),
     },
     {
       id: 2,
@@ -46,7 +45,7 @@ const FavoritesScreen = () => {
       price: '45.000',
       rating: 4.5,
       soldCount: '4.2k sold',
-      image: require('../assets/caramel_latte-removebg-preview.png'),
+      image: require('../assets/images/caramel_latte-removebg-preview.png'),
     },
     {
       id: 3,
@@ -57,7 +56,7 @@ const FavoritesScreen = () => {
       price: '85.000',
       rating: 4.9,
       soldCount: '1.1k sold',
-      image: require('../assets/croissant_chocolate-removebg-preview.png'),
+      image: require('../assets/images/croissant_chocolate-removebg-preview.png'),
     },
     {
       id: 4,
@@ -68,7 +67,7 @@ const FavoritesScreen = () => {
       price: '85.000',
       rating: 4.9,
       soldCount: '3.1k sold',
-      image: require('../assets/eclair_chocolat-removebg-preview.png'),
+      image: require('../assets/images/eclair_chocolat-removebg-preview.png'),
     },
   ];
 
@@ -76,7 +75,7 @@ const FavoritesScreen = () => {
     <View style={{ flex: 1 }}>
       <ScrollView
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ flexGrow: 1 }} // Agar background full meskipun konten sedikit
+        contentContainerStyle={{ flexGrow: 1 }}
       >
         <View style={styles.container}>
           {/* HEADER */}

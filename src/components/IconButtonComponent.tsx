@@ -1,6 +1,6 @@
 import React from 'react';
 import { TouchableOpacity, StyleSheet, ViewStyle } from 'react-native';
-import Icon from '@react-native-vector-icons/Ionicons'; // Ubah ke Ionicons
+import Ionicons from '@react-native-vector-icons/ionicons';
 
 interface IconButtonProps {
   iconName: string;       // Nama icon (contoh: 'cart-outline', 'notifications-outline')
@@ -23,7 +23,7 @@ const IconButtonComponent: React.FC<IconButtonProps> = ({
       onPress={onPress}
       activeOpacity={0.7}
     >
-      <Icon name={iconName as any} size={size} color={color} />
+      <Ionicons name={iconName as any} size={size} color={color} />
     </TouchableOpacity>
   );
 };

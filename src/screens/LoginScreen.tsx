@@ -1,14 +1,16 @@
 import React from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import {Image, Pressable, StyleSheet, Text, View } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 const LoginScreen = () => {
-    return (
-        <SafeAreaView style={styles.container}> 
+  const navigation = useNavigation<any>();
+  return (
+    <SafeAreaView style={styles.container}> 
         <View style = {styles.header}>
              <View  style = {styles.backgroundImageWrapper}>
                 <Image 
-                source={require('../assets/bg1.png')}
+                source={require('../assets/images/bg1.png')}
                 style = {styles.backgroundImage}/>
             </View>
             <View style = {styles.brand}>
@@ -23,8 +25,8 @@ const LoginScreen = () => {
                     <Text>crafted with love & butter</Text>
                 </View>
 
-                <Pressable style={styles.button}>
-                    <Text style = {styles.label}>Login</Text>
+                <Pressable style={styles.button} onPress={() => navigation.navigate('Login')}>
+                  <Text style = {styles.label}>Login</Text>
                 </Pressable>
 
                 <Pressable style= {{...styles.button, backgroundColor : '#FFFF', marginTop : 10}}>
@@ -69,14 +71,14 @@ const styles = StyleSheet.create({
 
   brandsmall: {
     fontSize: 50,
-    fontFamily: 'Times New Roman',
+    fontFamily: 'dancingScript',
     color: '#8C6E63',
     marginBottom: -20,
   },
 
   brandbig: {
     fontSize: 50,
-    fontFamily: 'Poppins-Bold',
+    fontFamily: 'Poppins-Regular',
     color: '#8C6E63',
   },
   

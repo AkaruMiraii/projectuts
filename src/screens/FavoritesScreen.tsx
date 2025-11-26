@@ -5,12 +5,13 @@ import {
   ScrollView,
   StyleSheet,
   ImageSourcePropType,
+  Alert,
 } from 'react-native';
-
-// 1. Pastikan path import ini benar sesuai struktur folder Anda
+import { useNavigation } from '@react-navigation/native';
 import BrandComponent from '../components/BrandComponent';
 import SearchBarComponent from '../components/SearchBarComponent';
 import ProductCardComponent from '../components/ProductCardComponent';
+import IconButtonComponent from '../components/IconButtonComponent';
 
 const FavoritesScreen = () => {
   interface ProductData {
@@ -23,6 +24,8 @@ const FavoritesScreen = () => {
     soldCount: string;
     image: ImageSourcePropType;
   }
+
+  const navigation = useNavigation<any>();
 
   const favoritesData: ProductData[] = [
     {
@@ -80,8 +83,16 @@ const FavoritesScreen = () => {
         <View style={styles.container}>
           {/* HEADER */}
           <View style={styles.header}>
-            <BrandComponent nama="Patrick" />
-            <SearchBarComponent />
+            <View style={styles.headerTop}>
+              <BrandComponent nama="Patrick" />
+              <View style={styles.headerRight}>
+                <IconButtonComponent iconName="cart-outline" onPress={() => Alert.alert('Cart', 'Cart pressed')} style={{ marginRight: 10 }} />
+                <IconButtonComponent iconName="log-out-outline" onPress={() => navigation.navigate('LoginScreen')} />
+              </View>
+            </View>
+            <View style={styles.searchWrapper}>
+              <SearchBarComponent />
+            </View>
           </View>
 
           {/* CONTENT SECTION */}
@@ -121,6 +132,18 @@ const styles = StyleSheet.create({
     borderBottomStartRadius: 40,
     borderBottomEndRadius: 40,
     gap: 15,
+  },
+  headerTop: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  searchWrapper: {
+    marginTop: 12,
+  },
+  headerRight: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   h1: {
     fontSize: 22,

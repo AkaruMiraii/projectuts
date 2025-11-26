@@ -107,6 +107,7 @@ const styles = StyleSheet.create({
   label : {
     color : 'white',
     fontSize : 20,
+    fontFamily : 'Poppins-Regular'
   },
   
 

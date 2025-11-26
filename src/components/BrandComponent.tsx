@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import Ionicons from '@react-native-vector-icons/ionicons';
 
-const BrandComponent = ({ nama = 'Zayn Malik' }) => {
+const BrandComponent = ({ nama = '' }) => {
   return (
     <View style={styles.brand}>
       {/* Avatar Icon */}

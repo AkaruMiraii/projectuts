@@ -18,7 +18,7 @@ const Login = () => {
             <Text style = {{fontSize : 40, marginTop : 40, fontFamily : 'Poppins-Regular'}}> Welcome </Text>
             <View style = {styles.form}>
                 <TextInput style={styles.formControl} placeholder="Email"/>
-                <TextInput style={styles.formControl} placeholder="Password"/>
+                <TextInput style={styles.formControl} placeholder="Password" secureTextEntry = {true}/>
                 <Text style = {{color : '#5D4038', textAlign : 'right', marginRight : 15}}>Forgot Password</Text>
                 <Pressable style={styles.button} onPress={() => navigation.navigate('MainTab')}>
                   <Text style = {styles.label}>Login</Text>

@@ -67,7 +67,7 @@ const FavoritesScreen = () => {
       price: '85.000',
       rating: 4.9,
       soldCount: '3.1k sold',
-      image: require('../assets/images/eclair_chocolat-removebg-preview.png'),
+      image: require('../assets/images/macaroon-removebg-preview.png'),
     },
   ];
 

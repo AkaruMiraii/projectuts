@@ -5,7 +5,7 @@ import {
   StyleSheet,
   Image,
   ImageSourcePropType,
-} from 'react-native'; // <-- tambah ini
+} from 'react-native'; 
 import Ionicons from '@react-native-vector-icons/ionicons';
 
 interface MenuItemProps {
@@ -98,7 +98,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     alignItems: 'center',
     justifyContent: 'center',
-    height: 130, // meningkat
+    height: 130, 
     marginBottom: 8,
   },
   image: {

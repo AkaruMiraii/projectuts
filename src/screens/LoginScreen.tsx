@@ -21,8 +21,8 @@ const LoginScreen = () => {
 
             <View style = {styles.formstart}>
                 <View style = {styles.textWrapper}>
-                    <Text style ={{fontSize : 30}}>Welcome</Text>
-                    <Text>crafted with love & butter</Text>
+                    <Text style ={{fontSize : 25, fontFamily : 'Poppins-Regular',}}>Welcome</Text>
+                    <Text style ={{fontSize : 12,color: '#8C6E63',fontFamily : 'Poppins-Regular',}}>crafted with love & butter</Text>
                 </View>
 
                 <Pressable style={styles.button} onPress={() => navigation.navigate('Login')}>
@@ -92,11 +92,12 @@ const styles = StyleSheet.create({
   textWrapper: {  
     alignItems: 'center',
     marginTop: 20,
+    gap : 0
   },
   button :{
     alignItems : 'center',
     justifyContent : 'center',
-    marginTop : 20,
+    marginTop : 15,
     backgroundColor : '#5D4038',
     width : 350,
     height : 60,

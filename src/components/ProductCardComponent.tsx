@@ -54,40 +54,37 @@ const ProductCardComponent = ({ image, title, category, description, price, rati
 
 const styles = StyleSheet.create({
   cardContainer: {
-    flexDirection: 'row', // Menyusun items secara horizontal
-    backgroundColor: '#fff',
+    flexDirection: 'row', 
+    backgroundColor: '#ffff',
     borderRadius: 20,
     padding: 15,
     margin: 10,
     height: 200,
-    // Shadow untuk iOS
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 8,
-    // Shadow untuk Android
     elevation: 5,
     borderWidth: 1,
     borderColor: '#f0f0f0',
   },
   infoContainer: {
-    flex: 0.65, // Mengambil 65% lebar kartu
+    flex: 0.65, 
     justifyContent: 'space-between',
     paddingRight: 10,
   },
   imageContainer: {
-    flex: 0.35, // Mengambil 35% lebar kartu
+    flex: 0.35, 
     justifyContent: 'center',
     alignItems: 'center',
   },
   productImage: {
     width: 130,
     height: 130,
-    // Menggeser gambar sedikit ke kanan agar terlihat "pop out" seperti desain
     transform: [{ translateX: 10 }, { scale: 1.1 }],
   },
   tagContainer: {
-    backgroundColor: '#5D4037', // Warna coklat tua
+    backgroundColor: '#5D4037', 
     paddingHorizontal: 10,
     paddingVertical: 4,
     borderRadius: 12,
@@ -117,7 +114,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   starIcon: {
-    color: '#8D6E63', // Warna bintang
+    color: '#8D6E63', 
     marginRight: 4,
     fontSize: 14,
   },

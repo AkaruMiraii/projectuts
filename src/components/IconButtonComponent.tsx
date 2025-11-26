@@ -3,11 +3,11 @@ import { TouchableOpacity, StyleSheet, ViewStyle } from 'react-native';
 import Ionicons from '@react-native-vector-icons/ionicons';
 
 interface IconButtonProps {
-  iconName: string;       // Nama icon (contoh: 'cart-outline', 'notifications-outline')
+  iconName: string;       
   onPress: () => void;
-  size?: number;          // Default 24
-  color?: string;         // Warna icon (Default Putih)
-  style?: ViewStyle;      // Style container (untuk ganti warna background tombol)
+  size?: number;          
+  color?: string;         
+  style?: ViewStyle;     
 }
 
 const IconButtonComponent: React.FC<IconButtonProps> = ({ 
@@ -30,10 +30,9 @@ const IconButtonComponent: React.FC<IconButtonProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#4E342E', // Warna default: Coklat Tua (sesuai gambar Cart)
-    width: 45,
+    backgroundColor: '#4E342E', 
     height: 45,
-    borderRadius: 12,           // Radius sudut
+    borderRadius: 12,         
     justifyContent: 'center',
     alignItems: 'center',
     

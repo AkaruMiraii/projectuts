@@ -15,7 +15,7 @@ const Login = () => {
         </View>
 
         <View style = {styles.body}>
-            <Text style = {{fontSize : 40, marginTop : 40, fontFamily : 'Poppins-Regular'}}> Welcome </Text>
+            <Text style = {{color : '#5D4038',fontSize : 40, marginTop : 40, fontFamily : 'Poppins-Regular'}}> Login </Text>
             <View style = {styles.form}>
                 <TextInput style={styles.formControl} placeholder="Email"/>
                 <TextInput style={styles.formControl} placeholder="Password" secureTextEntry = {true}/>
@@ -46,8 +46,8 @@ const Login = () => {
                 </View>
 
                 <View style = {styles.textFooterBottom}> 
-                    <Text>Dont have account?</Text>
-                    <Text>Sign Up</Text>
+                    <Text style={{color : '#5D4038', fontFamily : 'Poppins-Regular'}}>Dont have account?</Text>
+                    <Text style={{color : '#5D4038', fontFamily : 'Poppins-Regular'}}>Sign Up</Text>
                 </View>
 
                 
@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
 
   form : {
     flex : 1,
-    marginTop : 50,
+    marginTop : 35,
     gap : 20,
   },
   formControl : {
@@ -115,7 +115,7 @@ const styles = StyleSheet.create({
     height : 70,
     justifyContent : 'center',
     alignItems : 'center',
-    marginTop : 30,
+    marginTop : 20,
   },
 
   label : {
@@ -142,6 +142,7 @@ textFooterBottom :{
     justifyContent : 'center',
     gap : 5,
     marginTop : 5,
+  
 },
 
 sosmed : {

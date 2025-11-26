@@ -19,14 +19,14 @@ const Login = () => {
             <View style = {styles.form}>
                 <TextInput style={styles.formControl} placeholder="Email"/>
                 <TextInput style={styles.formControl} placeholder="Password" secureTextEntry = {true}/>
-                <Text style = {{color : '#5D4038', textAlign : 'right', marginRight : 15}}>Forgot Password</Text>
+                <Text style = {{color : '#5D4038', textAlign : 'right', marginRight : 15, fontFamily : 'Poppins-Regular'}}>Forgot Password</Text>
                 <Pressable style={styles.button} onPress={() => navigation.navigate('MainTab')}>
                   <Text style = {styles.label}>Login</Text>
                 </Pressable>
 
                 <View style = {styles.textFooterWrapper}>
                     <View style = {styles.line}></View>
-                        <Text style={{color : '#5D4038' }}>Or login with</Text>
+                        <Text style={{color : '#5D4038', fontFamily : 'Poppins-Regular'}}>Or login with</Text>
                             <View style = {styles.line}></View>
                 </View>
 
@@ -121,6 +121,7 @@ const styles = StyleSheet.create({
   label : {
     color : 'white',
     fontSize : 20,
+    fontFamily : 'Poppins-Regular'
   },
 
 textFooterWrapper : {

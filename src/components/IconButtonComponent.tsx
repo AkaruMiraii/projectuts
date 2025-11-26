@@ -31,6 +31,7 @@ const IconButtonComponent: React.FC<IconButtonProps> = ({
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#4E342E', 
+    width : 45,
     height: 45,
     borderRadius: 12,         
     justifyContent: 'center',

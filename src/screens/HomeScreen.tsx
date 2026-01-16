@@ -10,6 +10,8 @@ import IconButtonComponent from '../components/IconButtonComponent';
 import { ImageSourcePropType } from 'react-native';
 import api, { Product } from '../services/api';
 
+
+
 interface MenuItem {
   name: string;
   category: string;
@@ -47,6 +49,9 @@ const HomeScreen = () => {
               break;
             case 'macaroon-removebg-preview.png':
               imageSource = require('../assets/images/macaroon-removebg-preview.png');
+              break;
+              case 'Pistachio-removebg-preview.png':
+              imageSource = require('../assets/images/Pistachio-removebg-preview.png');
               break;
             default:
               imageSource = undefined;

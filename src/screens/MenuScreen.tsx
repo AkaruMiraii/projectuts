@@ -5,7 +5,6 @@ import {
   ScrollView,
   StyleSheet,
   ImageSourcePropType,
-  Alert,
   TouchableOpacity,
   ActivityIndicator,
 } from 'react-native';
@@ -50,24 +49,8 @@ const MenuScreen = () => {
         product_id: productId,
         quantity: 1
       });
-      Alert.alert('Success', 'Item added to cart!');
     } catch (err) {
-      Alert.alert('Error', 'Failed to add item to cart');
       console.error('Error adding to cart:', err);
-    }
-  };
-
-  const handleRemoveFromCart = async (productId: number) => {
-    try {
-      await api.updateCartItem({
-        user_id: userId,
-        product_id: productId,
-        quantity: -1
-      });
-      Alert.alert('Success', 'Item removed from cart!');
-    } catch (err) {
-      Alert.alert('Error', 'Failed to remove item from cart');
-      console.error('Error removing from cart:', err);
     }
   };
 
@@ -138,29 +121,15 @@ const MenuScreen = () => {
             <Text style={styles.h1}>Our Menu</Text>
 
             {products.map(item => (
-              <View key={item.id} style={styles.productWrapper}>
-                <ProductCardComponent
-                  image={getImageSource(item.image)}
-                  title={item.name}
-                  category={item.category}
-                  description="" // API doesn't provide description, so leave empty
-                  price={`Rp ${item.price.toLocaleString('id-ID')}`}
-                />
-                <View style={styles.cartButtons}>
-                  <TouchableOpacity
-                    style={styles.cartButton}
-                    onPress={() => handleRemoveFromCart(item.id)}
-                  >
-                    <Text style={styles.cartButtonText}>-</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    style={styles.cartButton}
-                    onPress={() => handleAddToCart(item.id)}
-                  >
-                    <Text style={styles.cartButtonText}>+</Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
+              <ProductCardComponent
+                key={item.id}
+                image={getImageSource(item.image)}
+                title={item.name}
+                category={item.category}
+                description=""
+                price={`Rp ${item.price.toLocaleString('id-ID')}`}
+                onBuyPress={() => handleAddToCart(item.id)}
+              />
             ))}
           </View>
         </View>
@@ -217,34 +186,6 @@ const styles = StyleSheet.create({
   },
   iconMargin: {
     marginRight: 10,
-  },
-  productWrapper: {
-    position: 'relative',
-  },
-  cartButtons: {
-    position: 'absolute',
-    right: 20,
-    bottom: 20,
-    flexDirection: 'row',
-    gap: 10,
-  },
-  cartButton: {
-    backgroundColor: '#795548',
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
-    elevation: 5,
-  },
-  cartButtonText: {
-    color: '#fff',
-    fontSize: 20,
-    fontWeight: 'bold',
   },
   loadingContainer: {
     flex: 1,

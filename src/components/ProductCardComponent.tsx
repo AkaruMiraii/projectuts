@@ -7,9 +7,10 @@ interface ProductCardProps {
   category: string;
   description: string;
   price: string;
+  onBuyPress?: () => void;
 }
 
-const ProductCardComponent = ({ image, title, category, description, price }: ProductCardProps) => {
+const ProductCardComponent = ({ image, title, category, description, price, onBuyPress }: ProductCardProps) => {
   return (
     <View style={styles.cardContainer}>
       {/* Bagian Kiri: Informasi Teks */}
@@ -29,9 +30,11 @@ const ProductCardComponent = ({ image, title, category, description, price }: Pr
         {/* Harga & Tombol Buy */}
         <View style={styles.bottomRow}>
           <Text style={styles.price}>{price}</Text>
-          <TouchableOpacity style={styles.buyButton}>
-            <Text style={styles.buyButtonText}>Buy now</Text>
-          </TouchableOpacity>
+          {onBuyPress && (
+            <TouchableOpacity style={styles.buyButton} onPress={onBuyPress}>
+              <Text style={styles.buyButtonText}>Buy now</Text>
+            </TouchableOpacity>
+          )}
         </View>
       </View>
 

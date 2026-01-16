@@ -6,7 +6,6 @@ import {
   StyleSheet,
   TouchableOpacity,
   Image,
-  Alert,
   ActivityIndicator,
   ImageSourcePropType
 } from 'react-native';
@@ -33,7 +32,6 @@ const CartScreen = () => {
       const data = await api.getCart(userId);
       setCartData(data);
     } catch (err) {
-      Alert.alert('Error', 'Failed to load cart');
       console.error('Error fetching cart:', err);
     } finally {
       setLoading(false);
@@ -51,7 +49,6 @@ const CartScreen = () => {
       // Refresh cart after update
       await fetchCart();
     } catch (err) {
-      Alert.alert('Error', 'Failed to update cart');
       console.error('Error updating cart:', err);
     } finally {
       setUpdating(false);
@@ -67,14 +64,7 @@ const CartScreen = () => {
   };
 
   const handleRemoveItem = (productId: number) => {
-    Alert.alert(
-      'Remove Item',
-      'Are you sure you want to remove this item from cart?',
-      [
-        { text: 'Cancel', style: 'cancel' },
-        { text: 'Remove', onPress: () => updateCartItem(productId, -999) }, // Large negative to ensure removal
-      ]
-    );
+    updateCartItem(productId, -999);
   };
 
   const formatPrice = (price: number) => {

@@ -14,7 +14,6 @@ interface MenuItem {
   name: string;
   category: string;
   price: string;
-  liked: boolean;
   image?: ImageSourcePropType;
 }
 
@@ -57,7 +56,6 @@ const HomeScreen = () => {
             name: product.name,
             category: product.category,
             price: product.price.toString(),
-            liked: product.liked,
             image: imageSource
           };
         });

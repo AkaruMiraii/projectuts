@@ -1,34 +1,111 @@
-import React from 'react';
-import { View, Text, ScrollView, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import {
+  View,
+  Text,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+  Image,
+  Alert,
+  ActivityIndicator,
+  ImageSourcePropType
+} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import IconButtonComponent from '../components/IconButtonComponent';
+import api, { CartResponse } from '../services/api';
 
 const CartScreen = () => {
   const navigation = useNavigation<any>();
+  const [cartData, setCartData] = useState<CartResponse | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [updating, setUpdating] = useState(false);
 
-  // Mock data untuk keranjang
-  const cartItems = [
-    {
-      id: 1,
-      name: 'Croissant au Chocolat',
-      price: 83000,
-      quantity: 2,
-      image: require('../assets/images/croissant_chocolate-removebg-preview.png'),
-    },
-    {
-      id: 2,
-      name: 'Caramel Latte',
-      price: 45000,
-      quantity: 1,
-      image: require('../assets/images/caramel_latte-removebg-preview.png'),
-    },
-  ];
+  // Hardcoded user ID for demo (in real app, get from auth context)
+  const userId = 1;
 
-  const totalPrice = cartItems.reduce((total, item) => total + (item.price * item.quantity), 0);
+  useEffect(() => {
+    fetchCart();
+  }, []);
+
+  const fetchCart = async () => {
+    try {
+      setLoading(true);
+      const data = await api.getCart(userId);
+      setCartData(data);
+    } catch (err) {
+      Alert.alert('Error', 'Failed to load cart');
+      console.error('Error fetching cart:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const updateCartItem = async (productId: number, quantityChange: number) => {
+    try {
+      setUpdating(true);
+      await api.updateCartItem({
+        user_id: userId,
+        product_id: productId,
+        quantity: quantityChange
+      });
+      // Refresh cart after update
+      await fetchCart();
+    } catch (err) {
+      Alert.alert('Error', 'Failed to update cart');
+      console.error('Error updating cart:', err);
+    } finally {
+      setUpdating(false);
+    }
+  };
+
+  const handleIncreaseQuantity = (productId: number) => {
+    updateCartItem(productId, 1);
+  };
+
+  const handleDecreaseQuantity = (productId: number) => {
+    updateCartItem(productId, -1);
+  };
+
+  const handleRemoveItem = (productId: number) => {
+    Alert.alert(
+      'Remove Item',
+      'Are you sure you want to remove this item from cart?',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        { text: 'Remove', onPress: () => updateCartItem(productId, -999) }, // Large negative to ensure removal
+      ]
+    );
+  };
 
   const formatPrice = (price: number) => {
     return `Rp ${price.toLocaleString('id-ID')}`;
   };
+
+  // Map API image string to require() for local images
+  const getImageSource = (imageName: string | null): ImageSourcePropType => {
+    if (!imageName) return require('../assets/images/croissant_chocolate-removebg-preview.png');
+
+    const imageMap: { [key: string]: ImageSourcePropType } = {
+      'choux_fix-removebg-preview.png': require('../assets/images/choux_fix-removebg-preview.png'),
+      'caramel_latte-removebg-preview.png': require('../assets/images/caramel_latte-removebg-preview.png'),
+      'croissant_chocolate-removebg-preview.png': require('../assets/images/croissant_chocolate-removebg-preview.png'),
+      'macaroon-removebg-preview.png': require('../assets/images/macaroon-removebg-preview.png'),
+    };
+
+    return imageMap[imageName] || require('../assets/images/croissant_chocolate-removebg-preview.png');
+  };
+
+  if (loading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#795548" />
+        <Text style={styles.loadingText}>Loading cart...</Text>
+      </View>
+    );
+  }
+
+  const cartItems = cartData?.items || [];
+  const totalPrice = cartData?.total || 0;
 
   return (
     <ScrollView style={styles.container}>
@@ -57,21 +134,33 @@ const CartScreen = () => {
           <>
             {cartItems.map((item) => (
               <View key={item.id} style={styles.cartItem}>
-                <Image source={item.image} style={styles.itemImage} />
+                <Image source={getImageSource(item.image)} style={styles.itemImage} />
                 <View style={styles.itemInfo}>
                   <Text style={styles.itemName}>{item.name}</Text>
                   <Text style={styles.itemPrice}>{formatPrice(item.price)}</Text>
                   <View style={styles.quantityContainer}>
-                    <TouchableOpacity style={styles.quantityButton}>
+                    <TouchableOpacity
+                      style={[styles.quantityButton, updating && styles.disabledButton]}
+                      onPress={() => handleDecreaseQuantity(item.product_id)}
+                      disabled={updating}
+                    >
                       <Text style={styles.quantityButtonText}>-</Text>
                     </TouchableOpacity>
                     <Text style={styles.quantityText}>{item.quantity}</Text>
-                    <TouchableOpacity style={styles.quantityButton}>
+                    <TouchableOpacity
+                      style={[styles.quantityButton, updating && styles.disabledButton]}
+                      onPress={() => handleIncreaseQuantity(item.product_id)}
+                      disabled={updating}
+                    >
                       <Text style={styles.quantityButtonText}>+</Text>
                     </TouchableOpacity>
                   </View>
                 </View>
-                <TouchableOpacity style={styles.removeButton}>
+                <TouchableOpacity
+                  style={styles.removeButton}
+                  onPress={() => handleRemoveItem(item.product_id)}
+                  disabled={updating}
+                >
                   <Text style={styles.removeButtonText}>✕</Text>
                 </TouchableOpacity>
               </View>
@@ -82,8 +171,10 @@ const CartScreen = () => {
               <Text style={styles.totalPrice}>{formatPrice(totalPrice)}</Text>
             </View>
 
-            <TouchableOpacity style={styles.checkoutButton}>
-              <Text style={styles.checkoutButtonText}>Checkout</Text>
+            <TouchableOpacity style={styles.checkoutButton} disabled={updating}>
+              <Text style={styles.checkoutButtonText}>
+                {updating ? 'Updating...' : 'Checkout'}
+              </Text>
             </TouchableOpacity>
           </>
         )}
@@ -118,6 +209,17 @@ const styles = StyleSheet.create({
   },
   content: {
     padding: 20,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#ffffffaa',
+  },
+  loadingText: {
+    marginTop: 10,
+    fontSize: 16,
+    color: '#666',
   },
   emptyCart: {
     alignItems: 'center',
@@ -184,6 +286,9 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  disabledButton: {
+    opacity: 0.5,
   },
   quantityButtonText: {
     fontSize: 18,

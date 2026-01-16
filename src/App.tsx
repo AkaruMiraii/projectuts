@@ -7,7 +7,7 @@ import Ionicons from "@react-native-vector-icons/ionicons";
 import Login from "./screens/Login";
 import LoginScreen from "./screens/LoginScreen";
 import HomeScreen from "./screens/HomeScreen";
-import FavoritesScreen from "./screens/FavoritesScreen";
+import MenuScreen from "./screens/MenuScreen";
 import CartScreen from "./screens/CartScreen";
 
 const RootStack = createNativeStackNavigator();
@@ -24,10 +24,10 @@ const MainTab = () => {
         }}
       />
       <Tab.Screen
-        name="Favorites"
-        component={FavoritesScreen}
+        name="Menu"
+        component={MenuScreen}
         options={{
-          tabBarIcon: () => <Ionicons name="heart-outline" size={24} color={'#795548'} />,
+          tabBarIcon: () => <Ionicons name="restaurant-outline" size={24} color={'#795548'} />,
         }}
       />
     </Tab.Navigator>

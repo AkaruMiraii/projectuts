@@ -8,8 +8,21 @@ export interface Product {
   name: string;
   category: string;
   price: number;
-  liked: boolean;
   image: string | null;
+}
+
+export interface CartItem {
+  id: number;
+  product_id: number;
+  name: string;
+  price: number;
+  quantity: number;
+  image: string | null;
+}
+
+export interface CartResponse {
+  items: CartItem[];
+  total: number;
 }
 
 // API service object
@@ -54,7 +67,7 @@ const api = {
     }
   },
 
-  getCart: async (userId: number) => {
+  getCart: async (userId: number): Promise<CartResponse> => {
     try {
       const response = await fetch(`${API_BASE_URL}/cart/${userId}`);
 
@@ -62,10 +75,33 @@ const api = {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      const data = await response.json();
+      const data: CartResponse = await response.json();
       return data;
     } catch (error) {
       console.error('Error fetching cart:', error);
+      throw error;
+    }
+  },
+
+  // Update cart item quantity (can be negative to decrease)
+  updateCartItem: async (data: { user_id: number; product_id: number; quantity: number }) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/cart`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const result = await response.json();
+      return result;
+    } catch (error) {
+      console.error('Error updating cart item:', error);
       throw error;
     }
   },

@@ -4,8 +4,8 @@ const pool = mysql.createPool({
   host: 'localhost',
   user: 'root',
   password: '',
-  database: 'bakery_app', // ✅ FIX DI SINI
-  port: 3307,             // ganti ke 3307 kalau MySQL kamu 3307
+  database: 'bakery_app',
+  port: 3307,
   waitForConnections: true,
   connectionLimit: 10
 });

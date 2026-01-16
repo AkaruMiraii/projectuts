@@ -12,7 +12,6 @@ interface MenuItemProps {
   name: string;
   category: string;
   price: string;
-  liked: boolean;
   image?: ImageSourcePropType;
 }
 
@@ -24,7 +23,6 @@ const MenuItem: React.FC<MenuItemProps> = ({
   name,
   category,
   price,
-  liked,
   image,
 }) => {
   const hasImage = image !== undefined && image !== null;
@@ -46,14 +44,9 @@ const MenuItem: React.FC<MenuItemProps> = ({
         <Text style={styles.categoryText}>{category}</Text>
       </View>
 
-      {/* Harga dan tombol like */}
+      {/* Harga */}
       <View style={styles.footer}>
         <Text style={styles.price}>{price}</Text>
-        <Ionicons
-          name={liked ? 'heart' : 'heart-outline'}
-          size={18}
-          color={liked ? '#c29d65' : '#c9c9c9'}
-        />
       </View>
     </View>
   );

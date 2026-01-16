@@ -6,7 +6,6 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Logging middleware
 app.use((req, res, next) => {
   console.log(`${req.method} ${req.path}`);
   next();
@@ -38,12 +37,8 @@ app.post('/api/cart', async (req, res) => {
     const { user_id, product_id, quantity } = req.body;
 
     // Validate required fields
-    if (!user_id || !product_id || !quantity) {
+    if (!user_id || !product_id || quantity === undefined || quantity === null) {
       return res.status(400).json({ error: 'user_id, product_id, and quantity are required' });
-    }
-
-    if (quantity <= 0) {
-      return res.status(400).json({ error: 'Quantity must be greater than 0' });
     }
 
     // Check if user exists
@@ -65,22 +60,34 @@ app.post('/api/cart', async (req, res) => {
     );
 
     if (existingCart.length > 0) {
-      // Update quantity
-      await db.query(
-        'UPDATE cart_items SET quantity = quantity + ? WHERE id = ?',
-        [quantity, existingCart[0].id]
-      );
-      res.json({ message: 'Cart item updated successfully' });
+      const newQuantity = existingCart[0].quantity + quantity;
+
+      if (newQuantity <= 0) {
+        // Remove item from cart if quantity becomes 0 or negative
+        await db.query('DELETE FROM cart_items WHERE id = ?', [existingCart[0].id]);
+        res.json({ message: 'Item removed from cart successfully' });
+      } else {
+        // Update quantity
+        await db.query(
+          'UPDATE cart_items SET quantity = ? WHERE id = ?',
+          [newQuantity, existingCart[0].id]
+        );
+        res.json({ message: 'Cart item updated successfully' });
+      }
     } else {
-      // Insert new item
-      await db.query(
-        'INSERT INTO cart_items (user_id, product_id, quantity) VALUES (?, ?, ?)',
-        [user_id, product_id, quantity]
-      );
-      res.status(201).json({ message: 'Item added to cart successfully' });
+      // Only add new item if quantity is positive
+      if (quantity > 0) {
+        await db.query(
+          'INSERT INTO cart_items (user_id, product_id, quantity) VALUES (?, ?, ?)',
+          [user_id, product_id, quantity]
+        );
+        res.status(201).json({ message: 'Item added to cart successfully' });
+      } else {
+        return res.status(400).json({ error: 'Cannot add item with negative or zero quantity' });
+      }
     }
   } catch (error) {
-    console.error('Error adding to cart:', error);
+    console.error('Error updating cart:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
 });

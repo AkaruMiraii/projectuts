@@ -8,6 +8,7 @@ import Login from "./screens/Login";
 import LoginScreen from "./screens/LoginScreen";
 import HomeScreen from "./screens/HomeScreen";
 import FavoritesScreen from "./screens/FavoritesScreen";
+import SignUpScreen from "./screens/SignUpScreen";
 
 const RootStack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -40,6 +41,7 @@ const App = () => {
         <RootStack.Screen name="LoginScreen" component={LoginScreen} />
         <RootStack.Screen name="Login" component={Login} />
         <RootStack.Screen name="MainTab" component={MainTab} />
+        <RootStack.Screen name="SignUpScreen" component={SignUpScreen} />
       </RootStack.Navigator>
     </NavigationContainer>
   );

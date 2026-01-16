@@ -29,7 +29,7 @@ const LoginScreen = () => {
                   <Text style = {styles.label}>Login</Text>
                 </Pressable>
 
-                <Pressable style= {{...styles.button, backgroundColor : '#FFFF', marginTop : 10}}>
+                <Pressable style= {{...styles.button, backgroundColor : '#FFFF', marginTop : 10}} onPress={() => navigation.navigate('SignUpScreen')}>
                     <Text style = {{...styles.label, color: '#5D4038'}}>Sign Up</Text>
                 </Pressable>
                 

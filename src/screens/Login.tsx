@@ -23,40 +23,8 @@ const Login = () => {
                 <Pressable style={styles.button} onPress={() => navigation.navigate('MainTab')}>
                   <Text style = {styles.label}>Login</Text>
                 </Pressable>
-
-                <View style = {styles.textFooterWrapper}>
-                    <View style = {styles.line}></View>
-                        <Text style={{color : '#5D4038', fontFamily : 'Poppins-Regular'}}>Or login with</Text>
-                            <View style = {styles.line}></View>
-                </View>
-
-                <View style = {styles.sosmed}>
-                    <Image 
-                    source={require ('../assets/images/google.png')} 
-                    style ={styles.icon} />
-
-                     <Image 
-                    source={require ('../assets/images/apple-logo.png')} 
-                    style ={styles.icon} />
-
-                        <Image 
-                      source={require ('../assets/images/facebook.png')} 
-                      style ={styles.icon} />
-
-                </View>
-
-                <View style = {styles.textFooterBottom}> 
-                    <Text style={{color : '#5D4038', fontFamily : 'Poppins-Regular'}}>Dont have account?</Text>
-                    <Text style={{color : '#5D4038', fontFamily : 'Poppins-Regular'}}>Sign Up</Text>
-                </View>
-
-                
-            
             </View>
-           
         </View>
-
-      
     </SafeAreaView>
   );
 }
@@ -88,7 +56,7 @@ const styles = StyleSheet.create({
   },
 
   body :{
-    height : 650,
+    height : 500,
     alignItems : 'center',
     backgroundColor : '#EFEBE9',
     borderTopLeftRadius : 100,
@@ -96,7 +64,7 @@ const styles = StyleSheet.create({
 
   form : {
     flex : 1,
-    marginTop : 35,
+    marginTop : 30,
     gap : 20,
   },
   formControl : {
@@ -115,7 +83,7 @@ const styles = StyleSheet.create({
     height : 70,
     justifyContent : 'center',
     alignItems : 'center',
-    marginTop : 20,
+    marginTop : 25,
   },
 
   label : {
@@ -124,38 +92,6 @@ const styles = StyleSheet.create({
     fontFamily : 'Poppins-Regular'
   },
 
-textFooterWrapper : {
-    flexDirection : 'row',
-    alignItems : 'center',
-    justifyContent : 'center',
-    gap : 10,
-    marginTop : 30,
-},
-line : {
-    width : 115,
-    height : 1.5,
-    backgroundColor : '#5D4038',
-},
-textFooterBottom :{
-    color : '#5D4038',
-    flexDirection : 'row',
-    justifyContent : 'center',
-    gap : 5,
-    marginTop : 5,
-  
-},
-
-sosmed : {
-    flexDirection : 'row',
-    justifyContent : 'center',
-    gap : 30,
-    marginTop : 5,
-},
-
-icon : {
-    width : 30,
-    height : 30,
-},
 
 })
 

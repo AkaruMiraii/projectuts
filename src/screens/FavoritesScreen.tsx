@@ -20,10 +20,8 @@ const FavoritesScreen = () => {
     category: string;
     description: string;
     price: string;
-    rating: number;
-    soldCount: string;
-    image: ImageSourcePropType;
-  }
+  image: ImageSourcePropType;
+}
 
   const navigation = useNavigation<any>();
 
@@ -35,8 +33,6 @@ const FavoritesScreen = () => {
       description:
         'A delicate choux pastry filled with rich, creamy coffee custard. Light, smooth, and perfectly balanced.',
       price: '70.000',
-      rating: 4.8,
-      soldCount: '3.5k sold',
       image: require('../assets/images/choux_fix-removebg-preview.png'),
     },
     {
@@ -46,8 +42,6 @@ const FavoritesScreen = () => {
       description:
         'Smooth espresso blended with creamy milk and caramel drizzle. Perfectly balanced sweetness.',
       price: '45.000',
-      rating: 4.5,
-      soldCount: '4.2k sold',
       image: require('../assets/images/caramel_latte-removebg-preview.png'),
     },
     {
@@ -57,8 +51,6 @@ const FavoritesScreen = () => {
       description:
         'Flaky, buttery layers filled with silky pistachio cream. A perfect balance of nutty aroma.',
       price: '85.000',
-      rating: 4.9,
-      soldCount: '1.1k sold',
       image: require('../assets/images/croissant_chocolate-removebg-preview.png'),
     },
     {
@@ -68,17 +60,15 @@ const FavoritesScreen = () => {
       description:
         'Delicate french almond cookies with smooth ganache filling. Crispy outside, soft inside.',
       price: '85.000',
-      rating: 4.9,
-      soldCount: '3.1k sold',
       image: require('../assets/images/macaroon-removebg-preview.png'),
     },
   ];
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={styles.fullFlex}>
       <ScrollView
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ flexGrow: 1 }}
+        contentContainerStyle={styles.scrollView}
       >
         <View style={styles.container}>
           {/* HEADER */}
@@ -86,7 +76,7 @@ const FavoritesScreen = () => {
             <View style={styles.headerTop}>
               <BrandComponent nama="Patrick" />
               <View style={styles.headerRight}>
-                <IconButtonComponent iconName="cart-outline" onPress={() => Alert.alert('Cart', 'Cart pressed')} style={{ marginRight: 10 }} />
+                <IconButtonComponent iconName="cart-outline" onPress={() => Alert.alert('Cart', 'Cart pressed')} style={styles.iconMargin} />
                 <IconButtonComponent iconName="log-out-outline" onPress={() => navigation.navigate('LoginScreen')} />
               </View>
             </View>
@@ -107,8 +97,6 @@ const FavoritesScreen = () => {
                 category={item.category}
                 description={item.description}
                 price={item.price}
-                rating={item.rating}
-                soldCount={item.soldCount}
               />
             ))}
           </View>
@@ -157,6 +145,15 @@ const styles = StyleSheet.create({
     paddingRight: 20,
     paddingLeft: 20,
     paddingBottom: 40,
+  },
+  scrollView: {
+    flexGrow: 1,
+  },
+  fullFlex: {
+    flex: 1,
+  },
+  iconMargin: {
+    marginRight: 10,
   },
 });
 

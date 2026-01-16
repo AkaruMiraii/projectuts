@@ -15,19 +15,19 @@ const Login = () => {
         </View>
 
         <View style = {styles.body}>
-            <Text style = {{color : '#5D4038',fontSize : 40, marginTop : 40, fontFamily : 'Poppins-Regular'}}> Login </Text>
+            <Text style = {styles.loginTitle}> Login </Text>
             <View style = {styles.form}>
                 <TextInput style={styles.formControl} placeholder="Email"/>
                 <TextInput style={styles.formControl} placeholder="Password" secureTextEntry = {true}/>
-                <Text style = {{color : '#5D4038', textAlign : 'right', marginRight : 15, fontFamily : 'Poppins-Regular'}}>Forgot Password</Text>
+                <Text style = {styles.forgotPassword}>Forgot Password</Text>
                 <Pressable style={styles.button} onPress={() => navigation.navigate('MainTab')}>
                   <Text style = {styles.label}>Login</Text>
                 </Pressable>
 
                 <View style = {styles.textFooterWrapper}>
-                    <View style = {styles.line}></View>
-                        <Text style={{color : '#5D4038', fontFamily : 'Poppins-Regular'}}>Or login with</Text>
-                            <View style = {styles.line}></View>
+                    <View style = {styles.line} />
+                        <Text style={styles.orLoginText}>Or login with</Text>
+                            <View style = {styles.line} />
                 </View>
 
                 <View style = {styles.sosmed}>
@@ -46,8 +46,8 @@ const Login = () => {
                 </View>
 
                 <View style = {styles.textFooterBottom}> 
-                    <Text style={{color : '#5D4038', fontFamily : 'Poppins-Regular'}}>Dont have account?</Text>
-                    <Text style={{color : '#5D4038', fontFamily : 'Poppins-Regular'}}>Sign Up</Text>
+                    <Text style={styles.signupText}>Dont have account?</Text>
+                    <Text style={styles.signupText}>Sign Up</Text>
                 </View>
 
                 
@@ -156,7 +156,26 @@ icon : {
     width : 30,
     height : 30,
 },
-
+loginTitle: {
+    color: '#5D4038',
+    fontSize: 40,
+    marginTop: 40,
+    fontFamily: 'Poppins-Regular'
+},
+forgotPassword: {
+    color: '#5D4038',
+    textAlign: 'right',
+    marginRight: 15,
+    fontFamily: 'Poppins-Regular'
+},
+orLoginText: {
+    color: '#5D4038',
+    fontFamily: 'Poppins-Regular'
+},
+signupText: {
+    color: '#5D4038',
+    fontFamily: 'Poppins-Regular'
+},
 })
 
 export default Login;

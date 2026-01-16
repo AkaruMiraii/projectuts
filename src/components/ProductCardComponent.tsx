@@ -7,11 +7,9 @@ interface ProductCardProps {
   category: string;
   description: string;
   price: string;
-  rating: number;
-  soldCount: string;
 }
 
-const ProductCardComponent = ({ image, title, category, description, price, rating, soldCount }: ProductCardProps) => {
+const ProductCardComponent = ({ image, title, category, description, price }: ProductCardProps) => {
   return (
     <View style={styles.cardContainer}>
       {/* Bagian Kiri: Informasi Teks */}
@@ -27,13 +25,6 @@ const ProductCardComponent = ({ image, title, category, description, price, rati
         <Text style={styles.description} numberOfLines={3}>
           {description}
         </Text>
-
-        {/* Rating & Terjual */}
-        <View style={styles.ratingContainer}>
-          <Text style={styles.starIcon}>★</Text> 
-          <Text style={styles.ratingText}>{rating} ({soldCount} sold)</Text>
-          <Text style={styles.heartIcon}>♥</Text>
-        </View>
 
         {/* Harga & Tombol Buy */}
         <View style={styles.bottomRow}>
@@ -107,26 +98,6 @@ const styles = StyleSheet.create({
     color: '#9E9E9E',
     lineHeight: 16,
     marginBottom: 8,
-  },
-  ratingContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 10,
-  },
-  starIcon: {
-    color: '#8D6E63', 
-    marginRight: 4,
-    fontSize: 14,
-  },
-  heartIcon: {
-    color: '#8D6E63',
-    marginLeft: 10,
-    fontSize: 14,
-  },
-  ratingText: {
-    fontSize: 11,
-    color: '#616161',
-    fontWeight: '500',
   },
   bottomRow: {
     flexDirection: 'row',

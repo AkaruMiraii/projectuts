@@ -1,0 +1,84 @@
+{
+  "_type": "export",
+  "__export_format": 4,
+  "__export_date": "2026-01-16T00:00:00.000Z",
+  "__export_source": "insomnia.desktop.app:v2023",
+  "resources": [
+    {
+      "_id": "env_bakery",
+      "_type": "environment",
+      "name": "Bakery API Env",
+      "data": {
+        "base_url": "http://localhost:3000/api",
+        "user_id": 1
+      }
+    },
+    {
+      "_id": "wrk_bakery",
+      "_type": "workspace",
+      "name": "Bakery API",
+      "description": "API testing for Bakery App (no review feature)"
+    },
+
+    {
+      "_id": "req_register",
+      "_type": "request",
+      "parentId": "wrk_bakery",
+      "name": "Register",
+      "method": "POST",
+      "url": "{{ base_url }}/auth/register",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"name\": \"Matthew\",\n  \"email\": \"matthew@email.com\",\n  \"password\": \"123456\"\n}"
+      }
+    },
+
+    {
+      "_id": "req_login",
+      "_type": "request",
+      "parentId": "wrk_bakery",
+      "name": "Login",
+      "method": "POST",
+      "url": "{{ base_url }}/auth/login",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"email\": \"matthew@email.com\",\n  \"password\": \"123456\"\n}"
+      }
+    },
+
+    {
+      "_id": "req_products",
+      "_type": "request",
+      "parentId": "wrk_bakery",
+      "name": "Get Products",
+      "method": "GET",
+      "url": "{{ base_url }}/products"
+    },
+
+    {
+      "_id": "req_cart_add",
+      "_type": "request",
+      "parentId": "wrk_bakery",
+      "name": "Add to Cart",
+      "method": "POST",
+      "url": "{{ base_url }}/cart",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"user_id\": {{ user_id }},\n  \"product_id\": 1,\n  \"quantity\": 2\n}"
+      }
+    },
+
+    {
+      "_id": "req_orders",
+      "_type": "request",
+      "parentId": "wrk_bakery",
+      "name": "Create Order",
+      "method": "POST",
+      "url": "{{ base_url }}/orders",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"user_id\": {{ user_id }}\n}"
+      }
+    }
+  ]
+}

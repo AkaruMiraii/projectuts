@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, Image, ImageSourcePropType } from 'react-native';
+import { StyleSheet, View, Image, ImageSourcePropType } from 'react-native';
 
 interface BannerContainerProps {
   image?: ImageSourcePropType;

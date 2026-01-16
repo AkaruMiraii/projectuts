@@ -25,7 +25,7 @@ const CategoryTabsComponent = ({
         renderItem={({ item }) => (
           <Pressable
             onPress={() => handlePress(item)}
-            style={{ marginRight: 10 }}
+            style={styles.tabPressable}
           >
             <View
               style={[
@@ -78,6 +78,9 @@ const styles = StyleSheet.create({
 
   inactiveText: {
     color: '#5b3a2a',
+  },
+  tabPressable: {
+    marginRight: 10,
   },
 });
 

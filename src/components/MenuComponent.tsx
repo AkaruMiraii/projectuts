@@ -11,8 +11,6 @@ import Ionicons from '@react-native-vector-icons/ionicons';
 interface MenuItemProps {
   name: string;
   category: string;
-  rating: number;
-  sold: string;
   price: string;
   liked: boolean;
   image?: ImageSourcePropType;
@@ -25,8 +23,6 @@ interface MenuComponentProps {
 const MenuItem: React.FC<MenuItemProps> = ({
   name,
   category,
-  rating,
-  sold,
   price,
   liked,
   image,
@@ -48,14 +44,6 @@ const MenuItem: React.FC<MenuItemProps> = ({
       <Text style={styles.name}>{name}</Text>
       <View style={styles.categoryTag}>
         <Text style={styles.categoryText}>{category}</Text>
-      </View>
-
-      {/* Rating dan terjual */}
-      <View style={styles.ratingRow}>
-        <Ionicons name="star" size={14} color="#c29d65" />
-        <Text style={styles.ratingText}>
-          {rating} ({sold} sold)
-        </Text>
       </View>
 
       {/* Harga dan tombol like */}
@@ -123,16 +111,6 @@ const styles = StyleSheet.create({
   categoryText: {
     fontSize: 11,
     color: '#fff',
-  },
-  ratingRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 4,
-  },
-  ratingText: {
-    fontSize: 12,
-    color: '#555',
-    marginLeft: 4,
   },
   footer: {
     flexDirection: 'row',

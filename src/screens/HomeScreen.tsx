@@ -1,81 +1,110 @@
-import React from 'react';
-import { useState } from 'react';
-import { Text, View, ScrollView, Alert } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { Text, View, ScrollView } from 'react-native';
 import { StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import BrandComponent from '../components/BrandComponent';
-import CategoryTabsComponent from '../components/CategoryTabsComponent';
 import SearchBarComponent from '../components/SearchBarComponent';
 import BannerContainerComponent from '../components/BannerContainerComponent';
 import MenuComponent from '../components/MenuComponent';
 import IconButtonComponent from '../components/IconButtonComponent';
+import { ImageSourcePropType } from 'react-native';
+import api, { Product } from '../services/api';
+
+interface MenuItem {
+  name: string;
+  category: string;
+  price: string;
+  liked: boolean;
+  image?: ImageSourcePropType;
+}
 
 const HomeScreen = () => {
-  const [selectedCategory, setSelectedCategory] = useState('All');
   const navigation = useNavigation<any>();
+  const [menuData, setMenuData] = useState<MenuItem[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
 
-    const menuData = [
-    {
-      name: 'Croissant au Chocolat',
-      category: 'Croissant',
-      rating: 4.8,
-      sold: '7.9k',
-      price: '83.000',
-      liked: false,
-      image: require('../assets/images/croissant_chocolate-removebg-preview.png'), // kosong = tampil icon default
-    },
-    {
-      name: 'Éclair au Chocolat',
-      category: 'Dessert',
-      rating: 4.7,
-      sold: '2.7k',
-      price: '65.000',
-      liked: false,
-      image: require('../assets/images/eclair_chocolat-removebg-preview.png'),
-    },
-    {
-      name: 'Choux à la Crème',
-      category: 'Dessert',
-      rating: 4.8,
-      sold: '3.5k',
-      price: '70.000',
-      liked: true,
-      image: require('../assets/images/choux_fix-removebg-preview.png'),
-    },
-    {
-      name: 'Caramel Latte',
-      category: 'Drink',
-      rating: 4.5,
-      sold: '4.2k',
-      price: '45.000',
-      liked: true,
-      image: require('../assets/images/caramel_latte-removebg-preview.png'),
-    },
-  ];
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        setLoading(true);
+        const products: Product[] = await api.getProducts();
 
-  
-  const filteredMenu =
-    selectedCategory === 'All'
-      ? menuData
-      : menuData.filter((item) => item.category === selectedCategory);
+        // Transform data to match frontend expectations
+        const transformedData: MenuItem[] = products.map(product => {
+          let imageSource: ImageSourcePropType | undefined;
+          switch (product.image) {
+            case 'croissant_chocolate-removebg-preview.png':
+              imageSource = require('../assets/images/croissant_chocolate-removebg-preview.png');
+              break;
+            case 'eclair_chocolat-removebg-preview.png':
+              imageSource = require('../assets/images/eclair_chocolat-removebg-preview.png');
+              break;
+            case 'choux_fix-removebg-preview.png':
+              imageSource = require('../assets/images/choux_fix-removebg-preview.png');
+              break;
+            case 'caramel_latte-removebg-preview.png':
+              imageSource = require('../assets/images/caramel_latte-removebg-preview.png');
+              break;
+            case 'macaroon-removebg-preview.png':
+              imageSource = require('../assets/images/macaroon-removebg-preview.png');
+              break;
+            default:
+              imageSource = undefined;
+          }
 
+          return {
+            name: product.name,
+            category: product.category,
+            price: product.price.toString(),
+            liked: product.liked,
+            image: imageSource
+          };
+        });
+
+        setMenuData(transformedData);
+        setError(null);
+      } catch (err) {
+        setError('Failed to load products');
+        console.error('Error fetching products:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
+  if (loading) {
     return (
+      <View style={styles.container}>
+        <Text style={styles.loadingText}>Loading products...</Text>
+      </View>
+    );
+  }
+
+  if (error) {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.errorText}>{error}</Text>
+      </View>
+    );
+  }
+
+  return (
     <ScrollView>
       <View style={styles.container}>
         <View style={styles.header}>
           <View style={styles.headerTop}>
             <BrandComponent nama='Patrick' />
             <View style={styles.headerRight}> 
-              <IconButtonComponent iconName="cart-outline" onPress={() => Alert.alert('Cart', 'Cart pressed')} style={{ marginRight: 10 }} />
+              <IconButtonComponent iconName="cart-outline" onPress={() => navigation.navigate('Cart')} style={styles.iconMargin} />
               <IconButtonComponent iconName="log-out-outline" onPress={() => navigation.navigate('LoginScreen')} />
             </View>
           </View>
           <View style={styles.searchWrapper}>
             <SearchBarComponent />
           </View>
-        </View>
-        <View style={styles.navigation}>
-          <CategoryTabsComponent onSelect={(cat) => setSelectedCategory(cat)} />
         </View>
         <View style={styles.deals}>
           <Text style={styles.h1}>Special Deals!</Text>
@@ -134,13 +163,6 @@ const styles = StyleSheet.create({
     marginTop: 12,
   },
 
-  navigation: {
-    backgroundColor: '#ffffffaa',
-    paddingTop: 20,
-    paddingRight: 20,
-    paddingLeft: 20,
-  },
-
   deals: {
     paddingTop: 20,
     paddingRight: 20,
@@ -161,6 +183,22 @@ const styles = StyleSheet.create({
     paddingRight: 20,
     paddingLeft: 20,
     paddingBottom: 70,
+  },
+
+  loadingText: {
+    fontSize: 18,
+    textAlign: 'center',
+    marginTop: 50,
+  },
+
+  errorText: {
+    fontSize: 18,
+    color: 'red',
+    textAlign: 'center',
+    marginTop: 50,
+  },
+  iconMargin: {
+    marginRight: 10,
   },
 });
 

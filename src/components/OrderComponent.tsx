@@ -4,16 +4,16 @@ import { StyleSheet, View, ScrollView } from 'react-native';
 const OrderComponent = () => {
   return (
     <ScrollView
-      contentContainerStyle={{ flexDirection: 'row', gap: 20 }}
+      contentContainerStyle={styles.scrollContent}
       horizontal={true}
     >
       <View style={styles.orderitem}>
-        <View style={styles.orderitemimage}></View>
-        <View style={styles.orderitemdescription}></View>
+        <View style={styles.orderitemimage} />
+        <View style={styles.orderitemdescription} />
       </View>
       <View style={styles.orderitem}>
-        <View style={styles.orderitemimage}></View>
-        <View style={styles.orderitemdescription}></View>
+        <View style={styles.orderitemimage} />
+        <View style={styles.orderitemdescription} />
       </View>
     </ScrollView>
   );
@@ -35,6 +35,10 @@ const styles = StyleSheet.create({
   orderitemdescription: {
     backgroundColor: '#f7e2ffff',
     flex: 1,
+  },
+  scrollContent: {
+    flexDirection: 'row',
+    gap: 20,
   },
 });
 

@@ -80,6 +80,8 @@ const CartScreen = () => {
       'caramel_latte-removebg-preview.png': require('../assets/images/caramel_latte-removebg-preview.png'),
       'croissant_chocolate-removebg-preview.png': require('../assets/images/croissant_chocolate-removebg-preview.png'),
       'macaroon-removebg-preview.png': require('../assets/images/macaroon-removebg-preview.png'),
+      'eclair_chocolat-removebg-preview.png': require('../assets/images/eclair_chocolat-removebg-preview.png'),
+      'Pistachio-removebg-preview.png': require('../assets/images/Pistachio-removebg-preview.png'),
     };
 
     return imageMap[imageName] || require('../assets/images/croissant_chocolate-removebg-preview.png');

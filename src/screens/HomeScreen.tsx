@@ -11,7 +11,6 @@ import { ImageSourcePropType } from 'react-native';
 import api, { Product } from '../services/api';
 
 
-
 interface MenuItem {
   name: string;
   category: string;
@@ -31,7 +30,7 @@ const HomeScreen = () => {
         setLoading(true);
         const products: Product[] = await api.getProducts();
 
-        // Transform data to match frontend expectations
+        // Transform data agar sesuai dengan ekspektasi frontend
         const transformedData: MenuItem[] = products.map(product => {
           let imageSource: ImageSourcePropType | undefined;
           switch (product.image) {
@@ -67,9 +66,9 @@ const HomeScreen = () => {
 
         setMenuData(transformedData);
         setError(null);
-      } catch (err) {
+      } catch {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         setError('Failed to load products');
-        console.error('Error fetching products:', err);
       } finally {
         setLoading(false);
       }
@@ -99,7 +98,7 @@ const HomeScreen = () => {
       <View style={styles.container}>
         <View style={styles.header}>
           <View style={styles.headerTop}>
-            <BrandComponent nama='Patrick' />
+            <BrandComponent />
             <View style={styles.headerRight}> 
               <IconButtonComponent iconName="cart-outline" onPress={() => navigation.navigate('Cart')} style={styles.iconMargin} />
               <IconButtonComponent iconName="log-out-outline" onPress={() => navigation.navigate('LoginScreen')} />

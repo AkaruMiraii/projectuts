@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   View,
   Text,
@@ -12,44 +12,54 @@ import {
 import { useNavigation } from '@react-navigation/native';
 import IconButtonComponent from '../components/IconButtonComponent';
 import api, { CartResponse } from '../services/api';
+import { useAuth } from '../contexts/AuthContext';
+import CustomPopup from '../components/CustomPopup';
 
 const CartScreen = () => {
   const navigation = useNavigation<any>();
+  const { user } = useAuth();
   const [cartData, setCartData] = useState<CartResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [updating, setUpdating] = useState(false);
+  const [popupVisible, setPopupVisible] = useState(false);
+  const [popupTitle, setPopupTitle] = useState('');
+  const [popupMessage, setPopupMessage] = useState('');
+  const [popupType, setPopupType] = useState<'error' | 'success' | 'info'>('info');
 
-  // Hardcoded user ID for demo (in real app, get from auth context)
-  const userId = 1;
+  const fetchCart = useCallback(async () => {
+    if (!user) return;
 
-  useEffect(() => {
-    fetchCart();
-  }, []);
-
-  const fetchCart = async () => {
     try {
       setLoading(true);
-      const data = await api.getCart(userId);
+      const data = await api.getCart(user.id);
       setCartData(data);
-    } catch (err) {
-      console.error('Error fetching cart:', err);
+    } catch {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } finally {
       setLoading(false);
     }
-  };
+  }, [user]);
+
+  useEffect(() => {
+    if (user) {
+      fetchCart();
+    }
+  }, [user, fetchCart]);
 
   const updateCartItem = async (productId: number, quantityChange: number) => {
+    if (!user) return;
+
     try {
       setUpdating(true);
       await api.updateCartItem({
-        user_id: userId,
+        user_id: user.id,
         product_id: productId,
         quantity: quantityChange
       });
-      // Refresh cart after update
+      // Refresh keranjang setelah update
       await fetchCart();
-    } catch (err) {
-      console.error('Error updating cart:', err);
+    } catch {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } finally {
       setUpdating(false);
     }
@@ -67,11 +77,48 @@ const CartScreen = () => {
     updateCartItem(productId, -999);
   };
 
+  const handleCheckout = async () => {
+    if (!user) {
+      setPopupTitle('Error');
+      setPopupMessage('Silakan login terlebih dahulu');
+      setPopupType('error');
+      setPopupVisible(true);
+      return;
+    }
+
+    if (!cartData || cartData.items.length === 0) {
+      setPopupTitle('Error');
+      setPopupMessage('Keranjang kosong');
+      setPopupType('error');
+      setPopupVisible(true);
+      return;
+    }
+
+    try {
+      setUpdating(true);
+      await api.createOrder({ user_id: user.id });
+      setPopupTitle('Berhasil');
+      setPopupMessage('Pesanan berhasil dibuat!');
+      setPopupType('success');
+      setPopupVisible(true);
+      // Refresh keranjang (seharusnya kosong sekarang)
+      await fetchCart();
+    } catch {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      setPopupTitle('Error');
+      setPopupMessage('Gagal membuat pesanan');
+      setPopupType('error');
+      setPopupVisible(true);
+    } finally {
+      setUpdating(false);
+    }
+  };
+
   const formatPrice = (price: number) => {
     return `Rp ${price.toLocaleString('id-ID')}`;
   };
 
-  // Map API image string to require() for local images
+  // Map string gambar API ke require() untuk gambar lokal
   const getImageSource = (imageName: string | null): ImageSourcePropType => {
     if (!imageName) return require('../assets/images/croissant_chocolate-removebg-preview.png');
 
@@ -163,14 +210,21 @@ const CartScreen = () => {
               <Text style={styles.totalPrice}>{formatPrice(totalPrice)}</Text>
             </View>
 
-            <TouchableOpacity style={styles.checkoutButton} disabled={updating}>
+            <TouchableOpacity style={styles.checkoutButton} onPress={handleCheckout} disabled={updating}>
               <Text style={styles.checkoutButtonText}>
-                {updating ? 'Updating...' : 'Checkout'}
+                {updating ? 'Processing...' : 'Checkout'}
               </Text>
             </TouchableOpacity>
           </>
         )}
       </View>
+      <CustomPopup
+        visible={popupVisible}
+        title={popupTitle}
+        message={popupMessage}
+        type={popupType}
+        onClose={() => setPopupVisible(false)}
+      />
     </ScrollView>
   );
 };

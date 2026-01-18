@@ -9,6 +9,8 @@ import LoginScreen from "./screens/LoginScreen";
 import HomeScreen from "./screens/HomeScreen";
 import MenuScreen from "./screens/MenuScreen";
 import CartScreen from "./screens/CartScreen";
+import SignUpScreen from "./screens/SignUpScreen";
+import { AuthProvider, useAuth } from "./contexts/AuthContext";
 
 const RootStack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -34,16 +36,30 @@ const MainTab = () => {
   );
 };
 
+const AppNavigator = () => {
+  const { user } = useAuth();
+
+  return (
+    <RootStack.Navigator
+      initialRouteName={user ? "MainTab" : "LoginScreen"}
+      screenOptions={{ headerShown: false }}
+    >
+      <RootStack.Screen name="LoginScreen" component={LoginScreen} />
+      <RootStack.Screen name="Login" component={Login} />
+      <RootStack.Screen name="MainTab" component={MainTab} />
+      <RootStack.Screen name="Cart" component={CartScreen} />
+      <RootStack.Screen name="SignUpScreen" component={SignUpScreen} />
+    </RootStack.Navigator>
+  );
+};
+
 const App = () => {
   return (
-    <NavigationContainer>
-      <RootStack.Navigator initialRouteName="LoginScreen" screenOptions={{ headerShown: false }}>
-        <RootStack.Screen name="LoginScreen" component={LoginScreen} />
-        <RootStack.Screen name="Login" component={Login} />
-        <RootStack.Screen name="MainTab" component={MainTab} />
-        <RootStack.Screen name="Cart" component={CartScreen} />
-      </RootStack.Navigator>
-    </NavigationContainer>
+    <AuthProvider>
+      <NavigationContainer>
+        <AppNavigator />
+      </NavigationContainer>
+    </AuthProvider>
   );
 };
 

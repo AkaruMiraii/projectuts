@@ -13,16 +13,20 @@ import BrandComponent from '../components/BrandComponent';
 import SearchBarComponent from '../components/SearchBarComponent';
 import ProductCardComponent from '../components/ProductCardComponent';
 import IconButtonComponent from '../components/IconButtonComponent';
+import CustomPopup from '../components/CustomPopup';
 import api, { Product } from '../services/api';
+import { useAuth } from '../contexts/AuthContext';
 
 const MenuScreen = () => {
   const navigation = useNavigation<any>();
+  const { user, logout } = useAuth();
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
-  // Hardcoded user ID for demo (in real app, get from auth context)
-  const userId = 1;
+  const [popupVisible, setPopupVisible] = useState(false);
+  const [popupTitle, setPopupTitle] = useState('');
+  const [popupMessage, setPopupMessage] = useState('');
+  const [popupType, setPopupType] = useState<'error' | 'success' | 'info'>('info');
 
   useEffect(() => {
     fetchProducts();
@@ -34,27 +38,48 @@ const MenuScreen = () => {
       setError(null);
       const data = await api.getProducts();
       setProducts(data);
-    } catch (err) {
+    } catch {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       setError('Failed to load products');
-      console.error('Error fetching products:', err);
     } finally {
       setLoading(false);
     }
   };
 
   const handleAddToCart = async (productId: number) => {
+    if (!user) {
+      setPopupTitle('Error');
+      setPopupMessage('Silakan login terlebih dahulu');
+      setPopupType('error');
+      setPopupVisible(true);
+      return;
+    }
+
     try {
       await api.updateCartItem({
-        user_id: userId,
+        user_id: user.id,
         product_id: productId,
         quantity: 1
       });
-    } catch (err) {
-      console.error('Error adding to cart:', err);
+      setPopupTitle('Berhasil');
+      setPopupMessage('Ditambahkan ke keranjang!');
+      setPopupType('success');
+      setPopupVisible(true);
+    } catch {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      setPopupTitle('Error');
+      setPopupMessage('Gagal menambahkan ke keranjang');
+      setPopupType('error');
+      setPopupVisible(true);
     }
   };
 
-  // Map API image string to require() for local images
+  const handleLogout = () => {
+    logout();
+    navigation.navigate('LoginScreen');
+  };
+
+  // Map string gambar API ke require() untuk gambar lokal
   const getImageSource = (imageName: string | null): ImageSourcePropType => {
     if (!imageName) return require('../assets/images/croissant_chocolate-removebg-preview.png');
 
@@ -100,7 +125,7 @@ const MenuScreen = () => {
           {/* HEADER */}
           <View style={styles.header}>
             <View style={styles.headerTop}>
-              <BrandComponent nama="Patrick" />
+              <BrandComponent />
               <View style={styles.headerRight}>
                 <IconButtonComponent
                   iconName="cart-outline"
@@ -109,7 +134,7 @@ const MenuScreen = () => {
                 />
                 <IconButtonComponent
                   iconName="log-out-outline"
-                  onPress={() => navigation.navigate('LoginScreen')}
+                  onPress={handleLogout}
                 />
               </View>
             </View>
@@ -136,6 +161,13 @@ const MenuScreen = () => {
           </View>
         </View>
       </ScrollView>
+      <CustomPopup
+        visible={popupVisible}
+        title={popupTitle}
+        message={popupMessage}
+        type={popupType}
+        onClose={() => setPopupVisible(false)}
+      />
     </View>
   );
 };

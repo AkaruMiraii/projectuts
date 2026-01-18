@@ -5,13 +5,13 @@ import {
   ScrollView,
   StyleSheet,
   ImageSourcePropType,
-  Alert,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import BrandComponent from '../components/BrandComponent';
 import SearchBarComponent from '../components/SearchBarComponent';
 import ProductCardComponent from '../components/ProductCardComponent';
 import IconButtonComponent from '../components/IconButtonComponent';
+import CustomPopup from '../components/CustomPopup';
 
 const FavoritesScreen = () => {
   interface ProductData {
@@ -24,6 +24,17 @@ const FavoritesScreen = () => {
 }
 
   const navigation = useNavigation<any>();
+  const [popupVisible, setPopupVisible] = React.useState(false);
+  const [popupTitle, setPopupTitle] = React.useState('');
+  const [popupMessage, setPopupMessage] = React.useState('');
+  const [popupType, setPopupType] = React.useState<'error' | 'success' | 'info'>('info');
+
+  const handleCartPress = () => {
+    setPopupTitle('Keranjang');
+    setPopupMessage('Keranjang diklik');
+    setPopupType('info');
+    setPopupVisible(true);
+  };
 
   const favoritesData: ProductData[] = [
     {
@@ -74,9 +85,9 @@ const FavoritesScreen = () => {
           {/* HEADER */}
           <View style={styles.header}>
             <View style={styles.headerTop}>
-              <BrandComponent nama="Patrick" />
+              <BrandComponent />
               <View style={styles.headerRight}>
-                <IconButtonComponent iconName="cart-outline" onPress={() => Alert.alert('Cart', 'Cart pressed')} style={styles.iconMargin} />
+                <IconButtonComponent iconName="cart-outline" onPress={handleCartPress} style={styles.iconMargin} />
                 <IconButtonComponent iconName="log-out-outline" onPress={() => navigation.navigate('LoginScreen')} />
               </View>
             </View>
@@ -102,6 +113,13 @@ const FavoritesScreen = () => {
           </View>
         </View>
       </ScrollView>
+      <CustomPopup
+        visible={popupVisible}
+        title={popupTitle}
+        message={popupMessage}
+        type={popupType}
+        onClose={() => setPopupVisible(false)}
+      />
     </View>
   );
 };

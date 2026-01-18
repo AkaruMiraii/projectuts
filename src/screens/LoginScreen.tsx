@@ -21,16 +21,16 @@ const LoginScreen = () => {
 
             <View style = {styles.formstart}>
                 <View style = {styles.textWrapper}>
-                    <Text style = {styles.welcomeTitle}>Welcome</Text>
-                    <Text style = {styles.welcomeSubtitle}>crafted with love & butter</Text>
+                    <Text style ={{fontSize : 25, fontFamily : 'Poppins-Regular',}}>Welcome</Text>
+                    <Text style ={{fontSize : 12,color: '#8C6E63',fontFamily : 'Poppins-Regular',}}>crafted with love & butter</Text>
                 </View>
 
                 <Pressable style={styles.button} onPress={() => navigation.navigate('Login')}>
                   <Text style = {styles.label}>Login</Text>
                 </Pressable>
 
-                <Pressable style= {styles.signupButton}>
-                    <Text style = {styles.signupLabel}>Sign Up</Text>
+                <Pressable style= {{...styles.button, backgroundColor : '#FFFF', marginTop : 10}} onPress={() => navigation.navigate('SignUpScreen')}>
+                    <Text style = {{...styles.label, color: '#5D4038'}}>Sign Up</Text>
                 </Pressable>
                 
             </View>
@@ -110,31 +110,8 @@ const styles = StyleSheet.create({
     fontSize : 20,
     fontFamily : 'Poppins-Regular'
   },
-  welcomeTitle: {
-    fontSize: 25,
-    fontFamily: 'Poppins-Regular',
-  },
-  welcomeSubtitle: {
-    fontSize: 12,
-    color: '#8C6E63',
-    fontFamily: 'Poppins-Regular',
-  },
-  signupButton: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: 15,
-    backgroundColor: '#FFFF',
-    width: 350,
-    height: 60,
-    borderRadius: 50,
-    paddingHorizontal: 40,
-    paddingVertical: 10,
-  },
-  signupLabel: {
-    color: '#5D4038',
-    fontSize: 20,
-    fontFamily: 'Poppins-Regular'
-  },
+  
+
 
 });
 export default LoginScreen;

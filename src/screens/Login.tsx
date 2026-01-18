@@ -1,11 +1,49 @@
-import React from "react";
-import { Image, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
+import React, { useState } from "react";
+import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useNavigation } from '@react-navigation/native';
+import { useAuth } from '../contexts/AuthContext';
+import api from '../services/api';
+import CustomPopup from '../components/CustomPopup';
 
 const Login = () => {
   const navigation = useNavigation<any>();
+  const { login } = useAuth();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [popupVisible, setPopupVisible] = useState(false);
+  const [popupTitle, setPopupTitle] = useState('');
+  const [popupMessage, setPopupMessage] = useState('');
+  const [popupType, setPopupType] = useState<'error' | 'success' | 'info'>('info');
+
+  const handleLogin = async () => {
+    if (!email || !password) {
+      setPopupTitle('Error');
+      setPopupMessage('Email atau password tidak valid');
+      setPopupType('error');
+      setPopupVisible(true);
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const response = await api.login({ email, password });
+      login(response.user);
+      navigation.navigate('MainTab');
+    } catch {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      setPopupTitle('Login Gagal');
+      setPopupMessage('Email atau password tidak valid');
+      setPopupType('error');
+      setPopupVisible(true);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
+    <>
     <SafeAreaView style = {styles.container}>
         <View style = {styles.header}>
             <View style = {styles.brand}>
@@ -15,49 +53,39 @@ const Login = () => {
         </View>
 
         <View style = {styles.body}>
-            <Text style = {styles.loginTitle}> Login </Text>
+            <Text style = {{color : '#5D4038',fontSize : 40, marginTop : 40, fontFamily : 'Poppins-Regular'}}> Login </Text>
             <View style = {styles.form}>
-                <TextInput style={styles.formControl} placeholder="Email"/>
-                <TextInput style={styles.formControl} placeholder="Password" secureTextEntry = {true}/>
-                <Text style = {styles.forgotPassword}>Forgot Password</Text>
-                <Pressable style={styles.button} onPress={() => navigation.navigate('MainTab')}>
-                  <Text style = {styles.label}>Login</Text>
+                <TextInput
+                  style={styles.formControl}
+                  placeholder="Email"
+                  value={email}
+                  onChangeText={setEmail}
+                  keyboardType="email-address"
+                  autoCapitalize="none"
+                />
+                <TextInput
+                  style={styles.formControl}
+                  placeholder="Password"
+                  value={password}
+                  onChangeText={setPassword}
+                  secureTextEntry={true}
+                />
+                <Text style = {{color : '#5D4038', textAlign : 'right', marginRight : 15, fontFamily : 'Poppins-Regular'}}>Forgot Password</Text>
+                <Pressable style={styles.button} onPress={handleLogin} disabled={loading}>
+                  <Text style = {styles.label}>{loading ? 'Logging in...' : 'Login'}</Text>
                 </Pressable>
-
-                <View style = {styles.textFooterWrapper}>
-                    <View style = {styles.line} />
-                        <Text style={styles.orLoginText}>Or login with</Text>
-                            <View style = {styles.line} />
-                </View>
-
-                <View style = {styles.sosmed}>
-                    <Image 
-                    source={require ('../assets/images/google.png')} 
-                    style ={styles.icon} />
-
-                     <Image 
-                    source={require ('../assets/images/apple-logo.png')} 
-                    style ={styles.icon} />
-
-                        <Image 
-                      source={require ('../assets/images/facebook.png')} 
-                      style ={styles.icon} />
-
-                </View>
-
-                <View style = {styles.textFooterBottom}> 
-                    <Text style={styles.signupText}>Dont have account?</Text>
-                    <Text style={styles.signupText}>Sign Up</Text>
-                </View>
-
-                
-            
             </View>
-           
         </View>
-
-      
     </SafeAreaView>
+
+    <CustomPopup
+      visible={popupVisible}
+      title={popupTitle}
+      message={popupMessage}
+      type={popupType}
+      onClose={() => setPopupVisible(false)}
+    />
+    </>
   );
 }
 
@@ -88,7 +116,7 @@ const styles = StyleSheet.create({
   },
 
   body :{
-    height : 650,
+    height : 500,
     alignItems : 'center',
     backgroundColor : '#EFEBE9',
     borderTopLeftRadius : 100,
@@ -96,7 +124,7 @@ const styles = StyleSheet.create({
 
   form : {
     flex : 1,
-    marginTop : 35,
+    marginTop : 30,
     gap : 20,
   },
   formControl : {
@@ -115,7 +143,7 @@ const styles = StyleSheet.create({
     height : 70,
     justifyContent : 'center',
     alignItems : 'center',
-    marginTop : 20,
+    marginTop : 25,
   },
 
   label : {
@@ -124,58 +152,7 @@ const styles = StyleSheet.create({
     fontFamily : 'Poppins-Regular'
   },
 
-textFooterWrapper : {
-    flexDirection : 'row',
-    alignItems : 'center',
-    justifyContent : 'center',
-    gap : 10,
-    marginTop : 30,
-},
-line : {
-    width : 115,
-    height : 1.5,
-    backgroundColor : '#5D4038',
-},
-textFooterBottom :{
-    color : '#5D4038',
-    flexDirection : 'row',
-    justifyContent : 'center',
-    gap : 5,
-    marginTop : 5,
-  
-},
 
-sosmed : {
-    flexDirection : 'row',
-    justifyContent : 'center',
-    gap : 30,
-    marginTop : 5,
-},
-
-icon : {
-    width : 30,
-    height : 30,
-},
-loginTitle: {
-    color: '#5D4038',
-    fontSize: 40,
-    marginTop: 40,
-    fontFamily: 'Poppins-Regular'
-},
-forgotPassword: {
-    color: '#5D4038',
-    textAlign: 'right',
-    marginRight: 15,
-    fontFamily: 'Poppins-Regular'
-},
-orLoginText: {
-    color: '#5D4038',
-    fontFamily: 'Poppins-Regular'
-},
-signupText: {
-    color: '#5D4038',
-    fontFamily: 'Poppins-Regular'
-},
 })
 
 export default Login;

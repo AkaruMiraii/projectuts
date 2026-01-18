@@ -1,19 +1,26 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, Image } from 'react-native';
 import Ionicons from '@react-native-vector-icons/ionicons';
+import { useAuth } from '../contexts/AuthContext';
 
-const BrandComponent = ({ nama = '' }) => {
+const BrandComponent = () => {
+  const { user } = useAuth();
+
   return (
     <View style={styles.brand}>
-      {/* Avatar Icon */}
+      {/* Avatar Icon or Profile Image */}
       <View style={styles.avatar}>
-        <Ionicons name="person" size={28} color="#5d4037" />
+        {user?.profile_image ? (
+          <Image source={{ uri: user.profile_image }} style={styles.profileImage} />
+        ) : (
+          <Ionicons name="person" size={28} color="#5d4037" />
+        )}
       </View>
 
       {/* Text Halo */}
       <View>
         <Text style={styles.halo}>Hello,</Text>
-        <Text style={styles.nama}>{nama}</Text>
+        <Text style={styles.nama}>{user?.name || 'Guest'}</Text>
       </View>
     </View>
   );
@@ -33,6 +40,12 @@ const styles = StyleSheet.create({
     borderRadius: 40,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+
+  profileImage: {
+    width: 45,
+    height: 45,
+    borderRadius: 22.5,
   },
 
   halo: {

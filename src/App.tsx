@@ -49,6 +49,7 @@ const AppNavigator = () => {
       <RootStack.Screen name="MainTab" component={MainTab} />
       <RootStack.Screen name="Cart" component={CartScreen} />
       <RootStack.Screen name="SignUpScreen" component={SignUpScreen} />
+      <RootStack.Screen name="MenuScreen" component={MenuScreen} />
     </RootStack.Navigator>
   );
 };

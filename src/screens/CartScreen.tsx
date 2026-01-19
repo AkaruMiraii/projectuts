@@ -164,7 +164,7 @@ const CartScreen = () => {
             <Text style={styles.emptyText}>Keranjang kosong</Text>
             <TouchableOpacity
               style={styles.shopButton}
-              onPress={() => navigation.navigate('Home')}
+              onPress={() => navigation.navigate('MenuScreen')}
             >
               <Text style={styles.shopButtonText}>Belanja Sekarang</Text>
             </TouchableOpacity>

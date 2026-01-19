@@ -110,11 +110,11 @@ const HomeScreen = () => {
         </View>
         <View style={styles.deals}>
           <Text style={styles.h1}>Special Deals!</Text>
-          <BannerContainerComponent />
+          <BannerContainerComponent image={require('../assets/images/POSTER-BEST-DEALS-1x.png')}/>
         </View>
         <View style={styles.popular}>
           <Text style={styles.h1}>Popular</Text>
-          <BannerContainerComponent />
+          <BannerContainerComponent image={require('../assets/images/MACARON-New.png')}/>
         </View>
         <View style={styles.menu}>
           <Text style={styles.h1}>Menu</Text>

@@ -18,7 +18,7 @@ const BannerContainerComponent = ({ image }: BannerContainerProps) => {
 const styles = StyleSheet.create({
   bannercontainer: {
     backgroundColor: '#795548',
-    height: 140,
+    height: 180,
     borderRadius: 10,
     overflow: 'hidden',
   },

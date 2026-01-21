@@ -1,9 +1,3 @@
--- Optimized Bakery App Database Schema
--- Generated for React Native + Express + MySQL project
--- Removed: favorites/liked feature, reviews/rating feature
--- Added: profile_image to users table
--- Plain text passwords (no hashing as per requirements)
-
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";
@@ -11,8 +5,6 @@ SET time_zone = "+00:00";
 DROP DATABASE IF EXISTS `bakery_app`;
 CREATE DATABASE `bakery_app`;
 USE `bakery_app`;
-
--- Core Tables
 
 CREATE TABLE `users` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -87,8 +79,6 @@ CREATE TABLE `order_items` (
   FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`) ON DELETE CASCADE,
   FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- Sample Data
 
 INSERT INTO `categories` (`name`) VALUES
 ('Croissant'),

@@ -5,9 +5,7 @@ import {
   ScrollView,
   StyleSheet,
   TouchableOpacity,
-  Image,
   ActivityIndicator,
-  ImageSourcePropType
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import IconButtonComponent from '../components/IconButtonComponent';
@@ -18,14 +16,17 @@ import CustomPopup from '../components/CustomPopup';
 const CartScreen = () => {
   const navigation = useNavigation<any>();
   const { user } = useAuth();
+
   const [cartData, setCartData] = useState<CartResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [updating, setUpdating] = useState(false);
+
   const [popupVisible, setPopupVisible] = useState(false);
   const [popupTitle, setPopupTitle] = useState('');
   const [popupMessage, setPopupMessage] = useState('');
   const [popupType, setPopupType] = useState<'error' | 'success' | 'info'>('info');
 
+  // ambil data keranjang dari server
   const fetchCart = useCallback(async () => {
     if (!user) return;
 
@@ -33,8 +34,6 @@ const CartScreen = () => {
       setLoading(true);
       const data = await api.getCart(user.id);
       setCartData(data);
-    } catch {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } finally {
       setLoading(false);
     }
@@ -46,6 +45,7 @@ const CartScreen = () => {
     }
   }, [user, fetchCart]);
 
+  // update quantity item
   const updateCartItem = async (productId: number, quantityChange: number) => {
     if (!user) return;
 
@@ -54,27 +54,12 @@ const CartScreen = () => {
       await api.updateCartItem({
         user_id: user.id,
         product_id: productId,
-        quantity: quantityChange
+        quantity: quantityChange,
       });
-      // Refresh keranjang setelah update
       await fetchCart();
-    } catch {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } finally {
       setUpdating(false);
     }
-  };
-
-  const handleIncreaseQuantity = (productId: number) => {
-    updateCartItem(productId, 1);
-  };
-
-  const handleDecreaseQuantity = (productId: number) => {
-    updateCartItem(productId, -1);
-  };
-
-  const handleRemoveItem = (productId: number) => {
-    updateCartItem(productId, -999);
   };
 
   const handleCheckout = async () => {
@@ -98,13 +83,11 @@ const CartScreen = () => {
       setUpdating(true);
       await api.createOrder({ user_id: user.id });
       setPopupTitle('Berhasil');
-      setPopupMessage('Pesanan berhasil dibuat!');
+      setPopupMessage('Pesanan berhasil dibuat');
       setPopupType('success');
       setPopupVisible(true);
-      // Refresh keranjang (seharusnya kosong sekarang)
       await fetchCart();
     } catch {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       setPopupTitle('Error');
       setPopupMessage('Gagal membuat pesanan');
       setPopupType('error');
@@ -114,25 +97,7 @@ const CartScreen = () => {
     }
   };
 
-  const formatPrice = (price: number) => {
-    return `Rp ${price.toLocaleString('id-ID')}`;
-  };
-
-  // Map string gambar API ke require() untuk gambar lokal
-  const getImageSource = (imageName: string | null): ImageSourcePropType => {
-    if (!imageName) return require('../assets/images/croissant_chocolate-removebg-preview.png');
-
-    const imageMap: { [key: string]: ImageSourcePropType } = {
-      'choux_fix-removebg-preview.png': require('../assets/images/choux_fix-removebg-preview.png'),
-      'caramel_latte-removebg-preview.png': require('../assets/images/caramel_latte-removebg-preview.png'),
-      'croissant_chocolate-removebg-preview.png': require('../assets/images/croissant_chocolate-removebg-preview.png'),
-      'macaroon-removebg-preview.png': require('../assets/images/macaroon-removebg-preview.png'),
-      'eclair_chocolat-removebg-preview.png': require('../assets/images/eclair_chocolat-removebg-preview.png'),
-      'Pistachio-removebg-preview.png': require('../assets/images/Pistachio-removebg-preview.png'),
-    };
-
-    return imageMap[imageName] || require('../assets/images/croissant_chocolate-removebg-preview.png');
-  };
+  const formatPrice = (price: number) => `Rp ${price.toLocaleString('id-ID')}`;
 
   if (loading) {
     return (
@@ -173,31 +138,36 @@ const CartScreen = () => {
           <>
             {cartItems.map((item) => (
               <View key={item.id} style={styles.cartItem}>
-                <Image source={getImageSource(item.image)} style={styles.itemImage} />
                 <View style={styles.itemInfo}>
                   <Text style={styles.itemName}>{item.name}</Text>
-                  <Text style={styles.itemPrice}>{formatPrice(item.price)}</Text>
+                  <Text style={styles.itemPrice}>
+                    {formatPrice(item.price)}
+                  </Text>
+
                   <View style={styles.quantityContainer}>
                     <TouchableOpacity
                       style={[styles.quantityButton, updating && styles.disabledButton]}
-                      onPress={() => handleDecreaseQuantity(item.product_id)}
+                      onPress={() => updateCartItem(item.product_id, -1)}
                       disabled={updating}
                     >
                       <Text style={styles.quantityButtonText}>-</Text>
                     </TouchableOpacity>
+
                     <Text style={styles.quantityText}>{item.quantity}</Text>
+
                     <TouchableOpacity
                       style={[styles.quantityButton, updating && styles.disabledButton]}
-                      onPress={() => handleIncreaseQuantity(item.product_id)}
+                      onPress={() => updateCartItem(item.product_id, 1)}
                       disabled={updating}
                     >
                       <Text style={styles.quantityButtonText}>+</Text>
                     </TouchableOpacity>
                   </View>
                 </View>
+
                 <TouchableOpacity
                   style={styles.removeButton}
-                  onPress={() => handleRemoveItem(item.product_id)}
+                  onPress={() => updateCartItem(item.product_id, -999)}
                   disabled={updating}
                 >
                   <Text style={styles.removeButtonText}>✕</Text>
@@ -206,11 +176,15 @@ const CartScreen = () => {
             ))}
 
             <View style={styles.totalContainer}>
-              <Text style={styles.totalLabel}>Total:</Text>
+              <Text style={styles.totalLabel}>Total</Text>
               <Text style={styles.totalPrice}>{formatPrice(totalPrice)}</Text>
             </View>
 
-            <TouchableOpacity style={styles.checkoutButton} onPress={handleCheckout} disabled={updating}>
+            <TouchableOpacity
+              style={styles.checkoutButton}
+              onPress={handleCheckout}
+              disabled={updating}
+            >
               <Text style={styles.checkoutButtonText}>
                 {updating ? 'Processing...' : 'Checkout'}
               </Text>
@@ -218,6 +192,7 @@ const CartScreen = () => {
           </>
         )}
       </View>
+
       <CustomPopup
         visible={popupVisible}
         title={popupTitle}
@@ -230,10 +205,8 @@ const CartScreen = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#ffffffaa',
-  },
+  container: { flex: 1, backgroundColor: '#ffffffaa' },
+
   header: {
     backgroundColor: '#795548',
     height: 120,
@@ -243,155 +216,111 @@ const styles = StyleSheet.create({
     borderBottomEndRadius: 40,
     justifyContent: 'center',
   },
+
   headerTop: {
     flexDirection: 'row',
-    alignItems: 'center',
     justifyContent: 'space-between',
+    alignItems: 'center',
   },
+
   headerTitle: {
     fontSize: 24,
     fontWeight: 'bold',
     color: '#fff',
   },
-  content: {
-    padding: 20,
-  },
+
+  content: { padding: 20 },
+
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#ffffffaa',
   },
-  loadingText: {
-    marginTop: 10,
-    fontSize: 16,
-    color: '#666',
-  },
+
+  loadingText: { marginTop: 10, color: '#666' },
+
   emptyCart: {
     alignItems: 'center',
-    justifyContent: 'center',
     paddingVertical: 100,
   },
-  emptyText: {
-    fontSize: 18,
-    color: '#666',
-    marginBottom: 20,
-  },
+
+  emptyText: { fontSize: 18, marginBottom: 20 },
+
   shopButton: {
     backgroundColor: '#795548',
     paddingHorizontal: 30,
     paddingVertical: 12,
     borderRadius: 25,
   },
-  shopButtonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
+
+  shopButtonText: { color: '#fff', fontWeight: 'bold' },
+
   cartItem: {
     flexDirection: 'row',
     backgroundColor: '#fff',
     borderRadius: 15,
     padding: 15,
     marginBottom: 15,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
     elevation: 3,
   },
-  itemImage: {
-    width: 60,
-    height: 60,
-    borderRadius: 10,
-    marginRight: 15,
-  },
-  itemInfo: {
-    flex: 1,
-    justifyContent: 'space-between',
-  },
-  itemName: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#333',
-  },
-  itemPrice: {
-    fontSize: 14,
-    color: '#795548',
-    fontWeight: '600',
-  },
+
+  itemInfo: { flex: 1 },
+
+  itemName: { fontSize: 16, fontWeight: 'bold' },
+
+  itemPrice: { color: '#795548', marginTop: 4 },
+
   quantityContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     marginTop: 10,
   },
+
   quantityButton: {
-    backgroundColor: '#f0f0f0',
     width: 30,
     height: 30,
     borderRadius: 15,
+    backgroundColor: '#f0f0f0',
     alignItems: 'center',
     justifyContent: 'center',
   },
-  disabledButton: {
-    opacity: 0.5,
-  },
-  quantityButtonText: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#333',
-  },
-  quantityText: {
-    marginHorizontal: 15,
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#333',
-  },
+
+  quantityButtonText: { fontSize: 18 },
+
+  quantityText: { marginHorizontal: 15 },
+
+  disabledButton: { opacity: 0.5 },
+
   removeButton: {
-    justifyContent: 'center',
-    alignItems: 'center',
     width: 30,
-    height: 30,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  removeButtonText: {
-    fontSize: 18,
-    color: '#999',
-  },
+
+  removeButtonText: { fontSize: 18, color: '#999' },
+
   totalContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
     backgroundColor: '#fff',
     padding: 20,
     borderRadius: 15,
     marginBottom: 20,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
     elevation: 3,
   },
-  totalLabel: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#333',
-  },
-  totalPrice: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#795548',
-  },
+
+  totalLabel: { fontSize: 18, fontWeight: 'bold' },
+
+  totalPrice: { fontSize: 20, fontWeight: 'bold', color: '#795548' },
+
   checkoutButton: {
     backgroundColor: '#795548',
     paddingVertical: 15,
     borderRadius: 25,
     alignItems: 'center',
   },
-  checkoutButtonText: {
-    color: '#fff',
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
+
+  checkoutButtonText: { color: '#fff', fontSize: 18, fontWeight: 'bold' },
 });
 
 export default CartScreen;
